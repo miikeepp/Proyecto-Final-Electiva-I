@@ -9,11 +9,16 @@
             <nav class="nav flex-column">
                 <a class="nav-link active" href="{% url 'dashboard' %}">Dashboard</a>
                 <a class="nav-link" href="#">Productos</a>
-                <a class="nav-link" href="#">Categorias</a>
-                <a class="nav-link" href="#">Proveedores</a>
+                {% if es_administrador %}
+                    <a class="nav-link" href="#">Categorias</a>
+                    <a class="nav-link" href="#">Proveedores</a>
+                {% endif %}
                 <a class="nav-link" href="#">Compras</a>
                 <a class="nav-link" href="#">Ventas</a>
-                <a class="nav-link" href="#">Reportes</a>
+                {% if es_administrador %}
+                    <a class="nav-link" href="#">Reportes</a>
+                    <a class="nav-link" href="/admin/">Administracion</a>
+                {% endif %}
                 <form action="{% url 'logout' %}" method="post" class="mt-2">
                     {% csrf_token %}
                     <button type="submit" class="btn btn-outline-light w-100 text-start">Cerrar sesion</button>
@@ -53,12 +58,36 @@
             </div>
 
             <section class="mt-4 bg-white border rounded p-4">
-                <h2 class="h5 mb-3">Modulos pendientes por integrar</h2>
-                <p class="text-muted mb-0">
-                    Esta pantalla queda lista para conectar productos, compras, ventas,
-                    reportes, alertas de bajo inventario y graficos cuando los otros
-                    modulos esten implementados.
-                </p>
+                {% if es_administrador %}
+                    <h2 class="h5 mb-3">Opciones administrativas</h2>
+                    <div class="row g-3">
+                        <div class="col-12 col-lg-4">
+                            <div class="border rounded p-3 h-100">Gestionar productos</div>
+                        </div>
+                        <div class="col-12 col-lg-4">
+                            <div class="border rounded p-3 h-100">Gestionar categorias y proveedores</div>
+                        </div>
+                        <div class="col-12 col-lg-4">
+                            <div class="border rounded p-3 h-100">Consultar reportes y usuarios</div>
+                        </div>
+                    </div>
+                {% elif es_operador %}
+                    <h2 class="h5 mb-3">Opciones operativas</h2>
+                    <div class="row g-3">
+                        <div class="col-12 col-lg-4">
+                            <div class="border rounded p-3 h-100">Ver productos</div>
+                        </div>
+                        <div class="col-12 col-lg-4">
+                            <div class="border rounded p-3 h-100">Registrar compras y ventas</div>
+                        </div>
+                        <div class="col-12 col-lg-4">
+                            <div class="border rounded p-3 h-100">Ver movimientos y bajo inventario</div>
+                        </div>
+                    </div>
+                {% else %}
+                    <h2 class="h5 mb-3">Rol pendiente</h2>
+                    <p class="text-muted mb-0">Tu usuario aun no tiene un rol asignado.</p>
+                {% endif %}
             </section>
         </main>
     </div>
