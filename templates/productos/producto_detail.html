@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+
+{% block title %}Detalle de producto{% endblock %}
+
+{% block content %}
+{% if messages %}
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags|default:'info' }} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+        </div>
+    {% endfor %}
+{% endif %}
+
+<div class="d-flex flex-column flex-lg-row justify-content-between gap-3 mb-4">
+    <div>
+        <h1 class="h3 mb-1">{{ producto.nombre }}</h1>
+        <p class="text-muted mb-0">Codigo {{ producto.codigo }}</p>
+    </div>
+    <div class="d-flex flex-wrap gap-2">
+        <a class="btn btn-outline-secondary" href="{% url 'productos:producto_list' %}">Volver</a>
+        <a class="btn btn-primary" href="{% url 'productos:producto_update' producto.pk %}">Editar</a>
+        <a class="btn btn-outline-danger" href="{% url 'productos:producto_delete' producto.pk %}">Eliminar</a>
+    </div>
+</div>
+
+<section class="bg-white border rounded p-4">
+    <div class="row g-4">
+        <div class="col-12 col-lg-8">
+            <h2 class="h5 mb-3">Informacion general</h2>
+            <dl class="row mb-0">
+                <dt class="col-sm-4">Categoria</dt>
+                <dd class="col-sm-8">{{ producto.categoria.nombre }}</dd>
+                <dt class="col-sm-4">Proveedor</dt>
+                <dd class="col-sm-8">{{ producto.proveedor.nombre }}</dd>
+                <dt class="col-sm-4">Descripcion</dt>
+                <dd class="col-sm-8">{{ producto.descripcion|default:'Sin descripcion' }}</dd>
+                <dt class="col-sm-4">Estado</dt>
+                <dd class="col-sm-8">
+                    {% if producto.activo %}
+                        <span class="badge text-bg-success">Activo</span>
+                    {% else %}
+                        <span class="badge text-bg-secondary">Inactivo</span>
+                    {% endif %}
+                </dd>
+            </dl>
+        </div>
+        <div class="col-12 col-lg-4">
+            <div class="border rounded p-3 h-100">
+                <h2 class="h5 mb-3">Inventario</h2>
+                <p class="mb-2"><strong>Precio compra:</strong> ${{ producto.precio_compra }}</p>
+                <p class="mb-2"><strong>Precio venta:</strong> ${{ producto.precio_venta }}</p>
+                <p class="mb-2"><strong>Stock:</strong> {{ producto.stock }}</p>
+                <p class="mb-2"><strong>Stock minimo:</strong> {{ producto.stock_minimo }}</p>
+                {% if producto.stock_bajo %}
+                    <span class="badge text-bg-warning">Stock bajo</span>
+                {% else %}
+                    <span class="badge text-bg-success">Stock suficiente</span>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

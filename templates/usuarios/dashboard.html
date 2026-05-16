@@ -8,10 +8,10 @@
         <aside class="col-12 col-md-3 col-lg-2 sidebar p-3">
             <nav class="nav flex-column">
                 <a class="nav-link active" href="{% url 'dashboard' %}">Dashboard</a>
-                <a class="nav-link" href="#">Productos</a>
+                <a class="nav-link" href="{% url 'productos:producto_list' %}">Productos</a>
                 {% if es_administrador %}
-                    <a class="nav-link" href="#">Categorias</a>
-                    <a class="nav-link" href="#">Proveedores</a>
+                    <a class="nav-link" href="{% url 'productos:categoria_list' %}">Categorias</a>
+                    <a class="nav-link" href="{% url 'productos:proveedor_list' %}">Proveedores</a>
                 {% endif %}
                 <a class="nav-link" href="#">Compras</a>
                 <a class="nav-link" href="#">Ventas</a>
@@ -62,10 +62,15 @@
                     <h2 class="h5 mb-3">Opciones administrativas</h2>
                     <div class="row g-3">
                         <div class="col-12 col-lg-4">
-                            <div class="border rounded p-3 h-100">Gestionar productos</div>
+                            <a class="border rounded p-3 h-100 d-block text-decoration-none text-dark" href="{% url 'productos:producto_list' %}">
+                                Gestionar productos
+                            </a>
                         </div>
                         <div class="col-12 col-lg-4">
-                            <div class="border rounded p-3 h-100">Gestionar categorias y proveedores</div>
+                            <div class="border rounded p-3 h-100">
+                                <a class="d-block text-decoration-none" href="{% url 'productos:categoria_list' %}">Gestionar categorias</a>
+                                <a class="d-block text-decoration-none mt-2" href="{% url 'productos:proveedor_list' %}">Gestionar proveedores</a>
+                            </div>
                         </div>
                         <div class="col-12 col-lg-4">
                             <div class="border rounded p-3 h-100">Consultar reportes y usuarios</div>
@@ -75,7 +80,9 @@
                     <h2 class="h5 mb-3">Opciones operativas</h2>
                     <div class="row g-3">
                         <div class="col-12 col-lg-4">
-                            <div class="border rounded p-3 h-100">Ver productos</div>
+                            <a class="border rounded p-3 h-100 d-block text-decoration-none text-dark" href="{% url 'productos:producto_list' %}">
+                                Ver productos
+                            </a>
                         </div>
                         <div class="col-12 col-lg-4">
                             <div class="border rounded p-3 h-100">Registrar compras y ventas</div>

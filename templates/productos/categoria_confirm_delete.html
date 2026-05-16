@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block title %}Desactivar categoria{% endblock %}
+
+{% block content %}
+<section class="bg-white border rounded p-4">
+    <h1 class="h3 mb-3">Desactivar categoria</h1>
+    <p>La categoria <strong>{{ categoria.nombre }}</strong> quedara inactiva en el sistema.</p>
+
+    <form method="post" class="d-flex justify-content-end gap-2 mt-4">
+        {% csrf_token %}
+        <a class="btn btn-outline-secondary" href="{% url 'productos:categoria_list' %}">Cancelar</a>
+        <button class="btn btn-danger" type="submit">Desactivar</button>
+    </form>
+</section>
+{% endblock %}
