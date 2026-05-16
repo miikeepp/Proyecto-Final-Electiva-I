@@ -1,58 +1,492 @@
 {% extends 'base.html' %}
 
-{% block title %}Iniciar sesion{% endblock %}
+{% block title %}Login | Inventario{% endblock %}
+{% block navbar %}{% endblock %}
 
 {% block layout %}
-<main class="container">
-    <div class="row justify-content-center align-items-center min-vh-100">
-        <div class="col-12 col-md-8 col-lg-5">
-            <div class="card shadow-sm border-0">
-                <div class="card-body p-4 p-md-5">
-                    <h1 class="h3 text-center mb-2">Sistema de Gestion de Inventario</h1>
-                    <p class="text-center text-muted mb-4">Inicia sesion para continuar</p>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
 
-                    {% if form.errors %}
-                        <div class="alert alert-danger" role="alert">
-                            Usuario o contrasena incorrectos.
-                        </div>
-                    {% endif %}
+<style>
+    .auth-stitch,
+    .auth-stitch * {
+        box-sizing: border-box;
+    }
 
-                    <form method="post" novalidate>
-                        {% csrf_token %}
-                        <div class="mb-3">
-                            <label for="{{ form.username.id_for_label }}" class="form-label">Usuario</label>
-                            <input
-                                type="text"
-                                name="{{ form.username.html_name }}"
-                                id="{{ form.username.id_for_label }}"
-                                class="form-control"
-                                autocomplete="username"
-                                required
-                            >
-                        </div>
+    .auth-stitch {
+        --bg: #051424;
+        --panel: #0f172a;
+        --field: #122131;
+        --field-high: #1c2b3c;
+        --border: #45464d;
+        --text: #d4e4fa;
+        --muted: #c6c6cd;
+        --soft: #798098;
+        --cyan: #7bd0ff;
+        --cyan-strong: #00a6e0;
+        --cyan-text: #00374d;
+        --danger-bg: #93000a;
+        --danger-text: #ffdad6;
+        min-height: 100vh;
+        margin: 0;
+        background: var(--bg);
+        color: var(--text);
+        display: flex;
+        font-family: Inter, Arial, sans-serif;
+    }
 
-                        <div class="mb-4">
-                            <label for="{{ form.password.id_for_label }}" class="form-label">Contrasena</label>
-                            <input
-                                type="password"
-                                name="{{ form.password.html_name }}"
-                                id="{{ form.password.id_for_label }}"
-                                class="form-control"
-                                autocomplete="current-password"
-                                required
-                            >
-                        </div>
+    .auth-pane {
+        position: relative;
+        width: 50%;
+        min-height: 100vh;
+        background: var(--panel);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        padding: 96px 64px 82px;
+        overflow: hidden;
+    }
 
-                        <button type="submit" class="btn btn-primary w-100">Ingresar</button>
-                    </form>
+    .auth-brand {
+        position: absolute;
+        top: 24px;
+        left: 32px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        color: var(--text);
+        text-decoration: none;
+    }
 
-                    <p class="text-center text-muted mt-4 mb-0">
-                        No tienes cuenta?
-                        <a href="{% url 'register' %}">Registrate</a>
-                    </p>
+    .auth-brand .material-symbols-outlined {
+        color: var(--cyan);
+        font-size: 32px;
+        font-variation-settings: 'FILL' 1, 'wght' 500, 'GRAD' 0, 'opsz' 24;
+    }
+
+    .auth-brand span:last-child {
+        font-size: 32px;
+        line-height: 1;
+        font-weight: 700;
+    }
+
+    .auth-card {
+        width: min(448px, 100%);
+        margin: 0 auto;
+    }
+
+    .auth-copy {
+        margin-bottom: 40px;
+    }
+
+    .auth-copy h1 {
+        margin: 0 0 12px;
+        color: var(--text);
+        font-size: 32px;
+        line-height: 1.25;
+        font-weight: 600;
+    }
+
+    .auth-copy p {
+        margin: 0;
+        color: var(--muted);
+        font-size: 16px;
+        line-height: 1.5;
+    }
+
+    .auth-form {
+        display: grid;
+        gap: 24px;
+    }
+
+    .auth-field {
+        display: grid;
+        gap: 8px;
+    }
+
+    .auth-label {
+        color: var(--muted);
+        font-size: 14px;
+        line-height: 1.4;
+        font-weight: 500;
+        text-transform: uppercase;
+    }
+
+    .auth-input {
+        width: 100%;
+        min-height: 48px;
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        background: var(--field);
+        color: var(--text);
+        padding: 12px 24px;
+        font: inherit;
+        transition: border-color 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+    }
+
+    .auth-input::placeholder {
+        color: var(--soft);
+    }
+
+    .auth-input:focus {
+        outline: none;
+        border-color: var(--cyan);
+        background: var(--field-high);
+        box-shadow: 0 0 0 2px rgba(123, 208, 255, 0.2);
+    }
+
+    .auth-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        padding-top: 8px;
+    }
+
+    .remember {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        color: var(--muted);
+        cursor: pointer;
+        font-size: 12px;
+        line-height: 1.35;
+        font-weight: 500;
+    }
+
+    .remember input {
+        width: 16px;
+        height: 16px;
+        accent-color: var(--cyan-strong);
+    }
+
+    .auth-link,
+    .auth-small-link {
+        color: var(--cyan);
+        font-weight: 700;
+        text-decoration: none;
+    }
+
+    .auth-small-link {
+        font-size: 12px;
+        font-weight: 500;
+    }
+
+    .auth-link:hover,
+    .auth-small-link:hover {
+        text-decoration: underline;
+    }
+
+    .auth-button {
+        width: 100%;
+        min-height: 56px;
+        border: 0;
+        border-radius: 8px;
+        background: var(--cyan-strong);
+        color: var(--cyan-text);
+        font-size: 24px;
+        line-height: 1.3;
+        font-weight: 600;
+        cursor: pointer;
+        box-shadow: 0 18px 42px rgba(0, 0, 0, 0.3);
+        transition: transform 0.16s ease, background 0.16s ease;
+    }
+
+    .auth-button:hover {
+        background: var(--cyan);
+        transform: translateY(-1px);
+    }
+
+    .auth-button:active {
+        transform: scale(0.98);
+    }
+
+    .auth-footer-text {
+        margin: 40px 0 0;
+        color: var(--muted);
+        text-align: center;
+        font-size: 16px;
+        line-height: 1.5;
+    }
+
+    .auth-meta {
+        position: absolute;
+        left: 32px;
+        right: 32px;
+        bottom: 24px;
+        display: flex;
+        align-items: center;
+        gap: 24px;
+        color: var(--muted);
+        font-size: 12px;
+        line-height: 1.35;
+    }
+
+    .auth-meta-links {
+        margin-left: auto;
+        display: flex;
+        gap: 24px;
+    }
+
+    .auth-meta a {
+        color: var(--muted);
+        text-decoration: none;
+    }
+
+    .auth-meta a:hover {
+        color: var(--cyan);
+    }
+
+    .auth-visual {
+        position: relative;
+        width: 50%;
+        min-height: 100vh;
+        overflow: hidden;
+        background: var(--bg);
+    }
+
+    .auth-visual::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        z-index: 1;
+        background: rgba(5, 20, 36, 0.4);
+    }
+
+    .auth-visual img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+    }
+
+    .auth-quote {
+        position: absolute;
+        left: 64px;
+        bottom: 64px;
+        z-index: 2;
+        width: min(520px, calc(100% - 128px));
+        padding: 40px;
+        border: 1px solid rgba(69, 70, 77, 0.5);
+        border-radius: 12px;
+        background: rgba(18, 33, 49, 0.62);
+        backdrop-filter: blur(18px);
+        box-shadow: 0 26px 80px rgba(0, 0, 0, 0.32);
+    }
+
+    .quote-kicker {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 12px;
+        color: var(--cyan);
+        font-size: 14px;
+        line-height: 1.4;
+        font-weight: 500;
+        text-transform: uppercase;
+    }
+
+    .auth-quote p {
+        margin: 0;
+    }
+
+    .quote-text {
+        color: var(--text);
+        font-size: 24px;
+        line-height: 1.35;
+        font-weight: 600;
+    }
+
+    .quote-person {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-top: 24px;
+    }
+
+    .quote-avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 999px;
+        background: var(--cyan-strong);
+        color: var(--cyan-text);
+        display: grid;
+        place-items: center;
+    }
+
+    .quote-person strong {
+        display: block;
+        color: var(--text);
+        font-size: 14px;
+        line-height: 1.4;
+        font-weight: 500;
+    }
+
+    .quote-person span {
+        display: block;
+        color: var(--muted);
+        font-size: 12px;
+        line-height: 1.35;
+        font-weight: 500;
+    }
+
+    .auth-alert {
+        display: flex;
+        gap: 8px;
+        align-items: flex-start;
+        padding: 12px;
+        border-radius: 8px;
+        background: var(--danger-bg);
+        color: var(--danger-text);
+        font-size: 12px;
+        line-height: 1.35;
+        font-weight: 500;
+    }
+
+    @media (max-width: 991.98px) {
+        .auth-stitch {
+            display: block;
+        }
+
+        .auth-pane {
+            width: 100%;
+            padding: 92px 24px 104px;
+        }
+
+        .auth-visual {
+            display: none;
+        }
+
+        .auth-brand {
+            left: 24px;
+        }
+
+        .auth-brand span:last-child {
+            font-size: 28px;
+        }
+
+        .auth-copy h1 {
+            font-size: 28px;
+        }
+
+        .auth-row {
+            align-items: flex-start;
+            flex-direction: column;
+        }
+
+        .auth-meta {
+            left: 24px;
+            right: 24px;
+            flex-wrap: wrap;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .auth-meta-links {
+            margin-left: 0;
+        }
+    }
+</style>
+
+<main class="auth-stitch">
+    <section class="auth-pane" aria-label="Inicio de sesion">
+        <a class="auth-brand" href="{% url 'login' %}" aria-label="Inventario">
+            <span class="material-symbols-outlined">inventory_2</span>
+            <span>Inventario</span>
+        </a>
+
+        <div class="auth-card">
+            <div class="auth-copy">
+                <h1>Gestiona tu inventario de forma inteligente</h1>
+                <p>Controla productos, compras, ventas y stock desde un solo lugar.</p>
+            </div>
+
+            {% if form.errors %}
+                <div class="auth-alert" role="alert">
+                    <span class="material-symbols-outlined" aria-hidden="true">error</span>
+                    <span>Usuario o contrasena incorrectos.</span>
+                </div>
+            {% endif %}
+
+            <form class="auth-form" method="post" novalidate>
+                {% csrf_token %}
+
+                <div class="auth-field">
+                    <label class="auth-label" for="{{ form.username.id_for_label }}">Usuario / email</label>
+                    <input
+                        class="auth-input"
+                        id="{{ form.username.id_for_label }}"
+                        name="{{ form.username.html_name }}"
+                        placeholder="Ingresa tu usuario"
+                        type="text"
+                        autocomplete="username"
+                        required
+                    >
+                </div>
+
+                <div class="auth-field">
+                    <label class="auth-label" for="{{ form.password.id_for_label }}">Contrasena</label>
+                    <input
+                        class="auth-input"
+                        id="{{ form.password.id_for_label }}"
+                        name="{{ form.password.html_name }}"
+                        placeholder="********"
+                        type="password"
+                        autocomplete="current-password"
+                        required
+                    >
+                </div>
+
+                <div class="auth-row">
+                    <label class="remember">
+                        <input type="checkbox" name="remember">
+                        <span>Recordarme</span>
+                    </label>
+                    <a class="auth-small-link" href="#">Olvidaste tu contrasena?</a>
+                </div>
+
+                <button class="auth-button" type="submit">Ingresar</button>
+            </form>
+
+            <p class="auth-footer-text">
+                No tienes cuenta?
+                <a class="auth-link" href="{% url 'register' %}">Registrate</a>
+            </p>
+        </div>
+
+        <footer class="auth-meta">
+            <span>© 2024 Inventario SaaS. All rights reserved.</span>
+            <div class="auth-meta-links">
+                <a href="#">Help</a>
+                <a href="#">Legal</a>
+                <a href="#">Contact</a>
+            </div>
+        </footer>
+    </section>
+
+    <section class="auth-visual" aria-label="Contexto visual de inventario">
+        <img
+            src="https://lh3.googleusercontent.com/aida-public/AB6AXuBFd5m9HYUVvI-gpq38q1UlhVcvFCHHoS1lzecgvSGJ1X_c7d0iqKQGmnQDiG7FUoZufv2FUP1A9tGvyD-0ufpF3HBi9o13kaJ7C8HDFy4awrCGsVnZiHAiZW3iPxAokoyzqFSrDOZ5VAu9T0TrXK6zajsQnflq71w2ltOkvPizBwRibxJ7FyBumjkNrevyCtFcYvo6aiNgT8qzgImUCwbEqCJZ8OB-heKRFq_WqtYbQLlPFVXk0sGztG4trNUPjWKtawypVWjD1g"
+            alt="Almacen moderno con automatizacion y control de inventario"
+        >
+        <div class="auth-quote">
+            <div class="quote-kicker">
+                <span class="material-symbols-outlined">rocket_launch</span>
+                <span>Optimizacion de Stock</span>
+            </div>
+            <p class="quote-text">"La eficiencia operativa aumento en un 40% desde que implementamos el sistema de control de Inventario."</p>
+            <div class="quote-person">
+                <div class="quote-avatar">
+                    <span class="material-symbols-outlined">person</span>
+                </div>
+                <div>
+                    <strong>Director de Logistica</strong>
+                    <span>TechLog Solutions</span>
                 </div>
             </div>
         </div>
-    </div>
+    </section>
 </main>
 {% endblock %}
