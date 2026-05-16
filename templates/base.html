@@ -33,6 +33,7 @@
     </style>
 </head>
 <body>
+    {% block navbar %}
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container-fluid">
             <a class="navbar-brand fw-semibold" href="{% url 'dashboard' %}">
@@ -50,6 +51,7 @@
             {% endif %}
         </div>
     </nav>
+    {% endblock %}
 
     {% block layout %}
         <main class="container py-4">
