@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block layout %}
+<div class="container-fluid">
+    <div class="row">
+        <aside class="col-12 col-md-3 col-lg-2 sidebar p-3">
+            <nav class="nav flex-column">
+                <a class="nav-link active" href="{% url 'dashboard' %}">Dashboard</a>
+                <a class="nav-link" href="#">Productos</a>
+                <a class="nav-link" href="#">Categorias</a>
+                <a class="nav-link" href="#">Proveedores</a>
+                <a class="nav-link" href="#">Compras</a>
+                <a class="nav-link" href="#">Ventas</a>
+                <a class="nav-link" href="#">Reportes</a>
+                <form action="{% url 'logout' %}" method="post" class="mt-2">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-outline-light w-100 text-start">Cerrar sesion</button>
+                </form>
+            </nav>
+        </aside>
+
+        <main class="col-12 col-md-9 col-lg-10 content-wrapper p-4">
+            <div class="d-flex flex-column flex-lg-row justify-content-between gap-3 mb-4">
+                <div>
+                    <h1 class="h3 mb-1">Sistema de Gestion de Inventario</h1>
+                    <p class="text-muted mb-0">Dashboard inicial del sistema</p>
+                </div>
+
+                <div class="bg-white border rounded p-3">
+                    <p class="mb-1"><strong>Usuario:</strong> {{ request.user.username }}</p>
+                    <p class="mb-0"><strong>Rol:</strong> {{ rol_usuario }}</p>
+                </div>
+            </div>
+
+            <div class="row g-3">
+                {% for tarjeta in tarjetas %}
+                    <div class="col-12 col-sm-6 col-xl-3">
+                        <div class="card border-0 shadow-sm h-100">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <p class="text-muted mb-1">{{ tarjeta.titulo }}</p>
+                                        <h2 class="h3 mb-0">{{ tarjeta.valor }}</h2>
+                                    </div>
+                                    <span class="badge text-bg-{{ tarjeta.color }}">Inicial</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+
+            <section class="mt-4 bg-white border rounded p-4">
+                <h2 class="h5 mb-3">Modulos pendientes por integrar</h2>
+                <p class="text-muted mb-0">
+                    Esta pantalla queda lista para conectar productos, compras, ventas,
+                    reportes, alertas de bajo inventario y graficos cuando los otros
+                    modulos esten implementados.
+                </p>
+            </section>
+        </main>
+    </div>
+</div>
+{% endblock %}
