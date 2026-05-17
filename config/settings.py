@@ -120,4 +120,4 @@ LOGOUT_REDIRECT_URL = 'login'
 
 
 # Tipo de campo automático por defecto
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField' 
