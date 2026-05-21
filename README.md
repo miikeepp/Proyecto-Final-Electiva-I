@@ -43,7 +43,7 @@ bash build.sh
 Start command:
 
 ```bash
-python manage.py migrate --noinput && python manage.py crear_roles && python manage.py crear_superusuario_render && python -m gunicorn config.wsgi:application
+bash start.sh
 ```
 
 ### Crear usuario administrador

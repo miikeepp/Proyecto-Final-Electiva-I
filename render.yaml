@@ -10,7 +10,7 @@ services:
     runtime: python
     plan: free
     buildCommand: bash build.sh
-    startCommand: python manage.py migrate --noinput && python manage.py crear_roles && python manage.py crear_superusuario_render && python -m gunicorn config.wsgi:application
+    startCommand: bash start.sh
     envVars:
       - key: DATABASE_URL
         fromDatabase:
