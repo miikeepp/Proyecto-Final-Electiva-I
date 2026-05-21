@@ -12,10 +12,11 @@
     {% endfor %}
 {% endif %}
 
-<div class="d-flex flex-column flex-lg-row justify-content-between gap-3 mb-4">
+<div class="page-header">
     <div>
-        <h1 class="h3 mb-1">Proveedores</h1>
-        <p class="text-muted mb-0">Gestion de proveedores</p>
+        <p class="page-kicker">Catalogo</p>
+        <h1 class="page-title">Proveedores</h1>
+        <p class="page-subtitle">Gestion de proveedores asociados al inventario.</p>
     </div>
     <div class="d-flex flex-wrap gap-2">
         <a class="btn btn-outline-secondary" href="{% url 'productos:producto_list' %}">Productos</a>
@@ -23,7 +24,7 @@
     </div>
 </div>
 
-<section class="bg-white border rounded p-3 mb-4">
+<section class="surface-card mb-4">
     <form method="get" class="row g-3 align-items-end">
         <div class="col-12 col-lg-10">
             <label class="form-label" for="buscar">Buscar</label>
@@ -35,7 +36,15 @@
     </form>
 </section>
 
-<section class="bg-white border rounded">
+<section class="surface-card p-0 overflow-hidden">
+    <div class="d-flex flex-column flex-md-row justify-content-between gap-2 p-3 border-bottom">
+        <div>
+            <h2 class="h5 mb-1">Listado de proveedores</h2>
+            <p class="text-muted mb-0">Contactos, datos fiscales y estado operativo.</p>
+        </div>
+        <span class="badge text-bg-light border align-self-start">{{ proveedores|length }} registros</span>
+    </div>
+
     <div class="table-responsive">
         <table class="table table-hover align-middle mb-0">
             <thead class="table-light">
@@ -55,7 +64,13 @@
                         <td class="fw-semibold">{{ proveedor.nombre }}</td>
                         <td>{{ proveedor.nit|default:'No registrado' }}</td>
                         <td>{{ proveedor.telefono|default:'No registrado' }}</td>
-                        <td>{{ proveedor.correo|default:'No registrado' }}</td>
+                        <td>
+                            {% if proveedor.correo %}
+                                <a href="mailto:{{ proveedor.correo }}" class="text-decoration-none">{{ proveedor.correo }}</a>
+                            {% else %}
+                                <span class="text-muted">No registrado</span>
+                            {% endif %}
+                        </td>
                         <td>{{ proveedor.contacto|default:'No registrado' }}</td>
                         <td>
                             {% if proveedor.activo %}

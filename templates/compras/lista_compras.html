@@ -1,49 +1,59 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h1>Compras</h1>
-<p>Listado de compras registradas en el sistema.</p>
+<div class="page-header">
+    <div>
+        <p class="page-kicker">Entradas</p>
+        <h1 class="page-title">Compras</h1>
+        <p class="page-subtitle">Listado de compras registradas en el sistema.</p>
+    </div>
 
-<a href="{% url 'compras:crear_compra' %}">
-    Registrar nueva compra
-</a>
+    <div class="d-flex flex-wrap gap-2">
+        <a class="btn btn-outline-secondary" href="{% url 'compras:lista_movimientos' %}">
+            Movimientos
+        </a>
+        <a class="btn btn-primary" href="{% url 'compras:crear_compra' %}">
+            Registrar compra
+        </a>
+    </div>
+</div>
 
-<br><br>
-
-<table border="1" cellpadding="8" cellspacing="0" width="100%">
-    <thead>
-        <tr>
-            <th>ID</th>
-            <th>Proveedor</th>
-            <th>Usuario</th>
-            <th>Fecha</th>
-            <th>Total</th>
-            <th>Detalle</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for compra in compras %}
-        <tr>
-            <td>{{ compra.id }}</td>
-            <td>{{ compra.proveedor.nombre }}</td>
-            <td>{{ compra.usuario.username }}</td>
-            <td>{{ compra.fecha }}</td>
-            <td>${{ compra.total }}</td>
-            <td>
-                <a href="{% url 'compras:detalle_compra' compra.id %}">Ver detalle</a>
-            </td>
-        </tr>
-        {% empty %}
-        <tr>
-            <td colspan="6">No hay compras registradas.</td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
-
-<br>
-
-<a href="{% url 'compras:lista_movimientos' %}">
-    Ver movimientos de inventario
-</a>
-{% endblock %} 
+<section class="surface-card p-0 overflow-hidden">
+    <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+            <thead class="table-light">
+                <tr>
+                    <th>ID</th>
+                    <th>Proveedor</th>
+                    <th>Usuario</th>
+                    <th>Fecha</th>
+                    <th>Total</th>
+                    <th class="text-end">Detalle</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for compra in compras %}
+                    <tr>
+                        <td class="fw-semibold">#{{ compra.id }}</td>
+                        <td>{{ compra.proveedor.nombre }}</td>
+                        <td>{{ compra.usuario.username }}</td>
+                        <td>{{ compra.fecha }}</td>
+                        <td class="fw-semibold">${{ compra.total }}</td>
+                        <td class="text-end">
+                            <a class="btn btn-outline-primary btn-sm" href="{% url 'compras:detalle_compra' compra.id %}">
+                                Ver detalle
+                            </a>
+                        </td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="6" class="text-center text-muted py-4">
+                            No hay compras registradas.
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>
+{% endblock %}

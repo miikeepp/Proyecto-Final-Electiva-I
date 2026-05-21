@@ -1,0 +1,64 @@
+{% with namespace=request.resolver_match.namespace url_name=request.resolver_match.url_name %}
+<div class="app-sidebar-inner">
+    <p class="app-sidebar-title">Navegacion</p>
+
+    <nav class="app-nav" aria-label="Menu principal">
+        <a class="app-nav-link {% if url_name == 'dashboard' %}active{% endif %}" href="{% url 'dashboard' %}">
+            <span class="app-nav-dot">D</span>
+            <span>Dashboard</span>
+        </a>
+
+        <a class="app-nav-link {% if namespace == 'productos' and 'categoria' not in url_name and 'proveedor' not in url_name %}active{% endif %}" href="{% url 'productos:producto_list' %}">
+            <span class="app-nav-dot">P</span>
+            <span>Productos</span>
+        </a>
+
+        <a class="app-nav-link {% if namespace == 'compras' and url_name != 'lista_movimientos' %}active{% endif %}" href="{% url 'compras:lista_compras' %}">
+            <span class="app-nav-dot">C</span>
+            <span>Compras</span>
+        </a>
+
+        <a class="app-nav-link {% if namespace == 'ventas' %}active{% endif %}" href="{% url 'ventas:lista_ventas' %}">
+            <span class="app-nav-dot">V</span>
+            <span>Ventas</span>
+        </a>
+
+        <a class="app-nav-link {% if namespace == 'compras' and url_name == 'lista_movimientos' %}active{% endif %}" href="{% url 'compras:lista_movimientos' %}">
+            <span class="app-nav-dot">M</span>
+            <span>Movimientos</span>
+        </a>
+
+        {% if es_administrador %}
+            <div class="app-nav-divider"></div>
+            <p class="app-sidebar-title mb-1">Administracion</p>
+
+            <a class="app-nav-link {% if namespace == 'productos' and 'categoria' in url_name %}active{% endif %}" href="{% url 'productos:categoria_list' %}">
+                <span class="app-nav-dot">CA</span>
+                <span>Categorias</span>
+            </a>
+
+            <a class="app-nav-link {% if namespace == 'productos' and 'proveedor' in url_name %}active{% endif %}" href="{% url 'productos:proveedor_list' %}">
+                <span class="app-nav-dot">PR</span>
+                <span>Proveedores</span>
+            </a>
+
+            <a class="app-nav-link {% if namespace == 'reportes' %}active{% endif %}" href="{% url 'reportes:dashboard_reportes' %}">
+                <span class="app-nav-dot">R</span>
+                <span>Reportes</span>
+            </a>
+
+            <a class="app-nav-link" href="/admin/">
+                <span class="app-nav-dot">A</span>
+                <span>Administracion</span>
+            </a>
+        {% endif %}
+    </nav>
+
+    <form action="{% url 'logout' %}" method="post" class="app-sidebar-form">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-outline-light w-100 text-start">
+            Cerrar sesion
+        </button>
+    </form>
+</div>
+{% endwith %}
