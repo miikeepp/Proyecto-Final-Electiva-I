@@ -1,45 +1,108 @@
 {% extends 'base.html' %}
 
+{% block title %}Detalle de venta #{{ venta.id }}{% endblock %}
+
 {% block content %}
-<h1>Detalle de venta #{{ venta.id }}</h1>
+<div class="page-header">
+    <div>
+        <p class="page-kicker">Venta registrada</p>
+        <h1 class="page-title">Detalle de venta #{{ venta.id }}</h1>
+        <p class="page-subtitle">Consulta el cliente, productos vendidos y total facturado.</p>
+    </div>
 
-<p><strong>Cliente:</strong> {{ venta.cliente|default:"Cliente general" }}</p>
-<p><strong>Usuario:</strong> {{ venta.usuario.username }}</p>
-<p><strong>Fecha:</strong> {{ venta.fecha }}</p>
-<p><strong>Observación:</strong> {{ venta.observacion|default:"Sin observación" }}</p>
+    <div class="d-flex flex-wrap gap-2">
+        <a class="btn btn-outline-secondary" href="{% url 'ventas:lista_ventas' %}">
+            Volver a ventas
+        </a>
+        <a class="btn btn-primary" href="{% url 'ventas:factura_pdf' venta.id %}">
+            Descargar PDF
+        </a>
+    </div>
+</div>
 
-<h2>Productos vendidos</h2>
+<div class="row g-3 mb-4">
+    <div class="col-12 col-md-6 col-xl-3">
+        <div class="surface-card h-100">
+            <p class="metric-label mb-1">Cliente</p>
+            <p class="h5 mb-0">{{ venta.cliente|default:"Cliente general" }}</p>
+        </div>
+    </div>
 
-<table border="1" cellpadding="8" cellspacing="0" width="100%">
-    <thead>
-        <tr>
-            <th>Producto</th>
-            <th>Cantidad</th>
-            <th>Precio unitario</th>
-            <th>Subtotal</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for detalle in venta.detalles.all %}
-        <tr>
-            <td>{{ detalle.producto.nombre }}</td>
-            <td>{{ detalle.cantidad }}</td>
-            <td>${{ detalle.precio_unitario }}</td>
-            <td>${{ detalle.subtotal }}</td>
-        </tr>
-        {% empty %}
-        <tr>
-            <td colspan="4">No hay productos en esta venta.</td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
+    <div class="col-12 col-md-6 col-xl-3">
+        <div class="surface-card h-100">
+            <p class="metric-label mb-1">Atendido por</p>
+            <p class="h5 mb-0">{{ venta.usuario.username|default:"No registrado" }}</p>
+        </div>
+    </div>
 
-<br>
+    <div class="col-12 col-md-6 col-xl-3">
+        <div class="surface-card h-100">
+            <p class="metric-label mb-1">Fecha</p>
+            <p class="h6 mb-0">{{ venta.fecha|date:"d/m/Y H:i" }}</p>
+        </div>
+    </div>
 
-<h3>Total: ${{ venta.total }}</h3>
+    <div class="col-12 col-md-6 col-xl-3">
+        <div class="surface-card h-100">
+            <p class="metric-label mb-1">Total</p>
+            <p class="h4 mb-0 text-primary">${{ venta.total }}</p>
+        </div>
+    </div>
+</div>
 
-<a href="{% url 'ventas:factura_pdf' venta.id %}">Descargar factura PDF</a>
-<br><br>
-<a href="{% url 'ventas:lista_ventas' %}">Volver a ventas</a>
-{% endblock %} 
+<section class="surface-card mb-4">
+    <div class="d-flex flex-column flex-lg-row justify-content-between gap-2">
+        <div>
+            <h2 class="h5 mb-1">Observacion</h2>
+            <p class="text-muted mb-0">{{ venta.observacion|default:"Sin observacion" }}</p>
+        </div>
+        <span class="badge text-bg-success align-self-start">Completada</span>
+    </div>
+</section>
+
+<section class="surface-card p-0 overflow-hidden">
+    <div class="d-flex flex-column flex-md-row justify-content-between gap-2 p-3 border-bottom">
+        <div>
+            <h2 class="h5 mb-1">Productos vendidos</h2>
+            <p class="text-muted mb-0">Detalle de unidades, precio y subtotal por producto.</p>
+        </div>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+            <thead class="table-light">
+                <tr>
+                    <th>Producto</th>
+                    <th class="text-center">Cantidad</th>
+                    <th class="text-end">Precio unitario</th>
+                    <th class="text-end">Subtotal</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for detalle in venta.detalles.all %}
+                    <tr>
+                        <td class="fw-semibold">{{ detalle.producto.nombre }}</td>
+                        <td class="text-center">
+                            <span class="badge text-bg-light border">{{ detalle.cantidad }}</span>
+                        </td>
+                        <td class="text-end">${{ detalle.precio_unitario }}</td>
+                        <td class="text-end fw-semibold">${{ detalle.subtotal }}</td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="4" class="text-center text-muted py-4">
+                            No hay productos en esta venta.
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+            <tfoot class="table-light">
+                <tr>
+                    <th colspan="3" class="text-end">Total facturado</th>
+                    <th class="text-end h5 mb-0">${{ venta.total }}</th>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+</section>
+{% endblock %}

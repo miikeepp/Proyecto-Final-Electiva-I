@@ -1,39 +1,54 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h1>Movimientos de inventario</h1>
-<p>Historial de entradas y salidas del inventario.</p>
+<div class="page-header">
+    <div>
+        <p class="page-kicker">Inventario</p>
+        <h1 class="page-title">Movimientos</h1>
+        <p class="page-subtitle">Historial de entradas y salidas del inventario.</p>
+    </div>
 
-<table border="1" cellpadding="8" cellspacing="0" width="100%">
-    <thead>
-        <tr>
-            <th>ID</th>
-            <th>Producto</th>
-            <th>Tipo</th>
-            <th>Cantidad</th>
-            <th>Fecha</th>
-            <th>Descripción</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for movimiento in movimientos %}
-        <tr>
-            <td>{{ movimiento.id }}</td>
-            <td>{{ movimiento.producto.nombre }}</td>
-            <td>{{ movimiento.tipo }}</td>
-            <td>{{ movimiento.cantidad }}</td>
-            <td>{{ movimiento.fecha }}</td>
-            <td>{{ movimiento.descripcion }}</td>
-        </tr>
-        {% empty %}
-        <tr>
-            <td colspan="6">No hay movimientos registrados.</td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
+    <a class="btn btn-outline-secondary" href="{% url 'compras:lista_compras' %}">
+        Volver a compras
+    </a>
+</div>
 
-<br>
-
-<a href="{% url 'compras:lista_compras' %}">Volver a compras</a>
-{% endblock %} 
+<section class="surface-card p-0 overflow-hidden">
+    <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+            <thead class="table-light">
+                <tr>
+                    <th>ID</th>
+                    <th>Producto</th>
+                    <th>Tipo</th>
+                    <th>Cantidad</th>
+                    <th>Fecha</th>
+                    <th>Descripcion</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for movimiento in movimientos %}
+                    <tr>
+                        <td class="fw-semibold">#{{ movimiento.id }}</td>
+                        <td>{{ movimiento.producto.nombre }}</td>
+                        <td>
+                            <span class="badge {% if movimiento.tipo == 'ENTRADA' %}text-bg-success{% else %}text-bg-warning{% endif %}">
+                                {{ movimiento.tipo }}
+                            </span>
+                        </td>
+                        <td>{{ movimiento.cantidad }}</td>
+                        <td>{{ movimiento.fecha }}</td>
+                        <td>{{ movimiento.descripcion }}</td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="6" class="text-center text-muted py-4">
+                            No hay movimientos registrados.
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>
+{% endblock %}

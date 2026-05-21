@@ -2,116 +2,61 @@
 
 {% block title %}Dashboard{% endblock %}
 
-{% block layout %}
-<div class="container-fluid">
-    <div class="row">
-        <aside class="col-12 col-md-3 col-lg-2 sidebar p-3">
-            <nav class="nav flex-column">
+{% block content %}
+<div class="page-header">
+    <div>
+        <p class="page-kicker">Panel principal</p>
+        <h1 class="page-title">Sistema de Gestion de Inventario</h1>
+        <p class="page-subtitle">Resumen inicial del inventario y accesos rapidos.</p>
+    </div>
 
-                <a class="nav-link active" href="{% url 'dashboard' %}">
-                    Dashboard
-                </a>
+    <div class="surface-card">
+        <p class="mb-1">
+            <strong>Usuario:</strong> {{ request.user.username }}
+        </p>
+        <p class="mb-0">
+            <strong>Rol:</strong> {{ rol_usuario }}
+        </p>
+    </div>
+</div>
 
-                <a class="nav-link" href="{% url 'productos:producto_list' %}">
-                    Productos
-                </a>
-
-                {% if es_administrador %}
-                    <a class="nav-link" href="{% url 'productos:categoria_list' %}">
-                        Categorias
-                    </a>
-
-                    <a class="nav-link" href="{% url 'productos:proveedor_list' %}">
-                        Proveedores
-                    </a>
-                {% endif %}
-
-                <a class="nav-link" href="{% url 'compras:lista_compras' %}">
-                    Compras
-                </a>
-
-                <a class="nav-link" href="{% url 'ventas:lista_ventas' %}">
-                    Ventas
-                </a>
-
-                {% if es_administrador %}
-                    <a class="nav-link" href="{% url 'compras:lista_movimientos' %}">
-                        Movimientos
-                    </a>
-
-                    <a class="nav-link" href="{% url 'reportes:dashboard_reportes' %}">
-                        Reportes
-                    </a>
-
-                    <a class="nav-link" href="/admin/">
-                        Administracion
-                    </a>
-                {% endif %}
-
-                <form action="{% url 'logout' %}" method="post" class="mt-2">
-                    {% csrf_token %}
-                    <button type="submit" class="btn btn-outline-light w-100 text-start">
-                        Cerrar sesion
-                    </button>
-                </form>
-
-            </nav>
-        </aside>
-
-        <main class="col-12 col-md-9 col-lg-10 content-wrapper p-4">
-
-            <div class="d-flex flex-column flex-lg-row justify-content-between gap-3 mb-4">
-                <div>
-                    <h1 class="h3 mb-1">Sistema de Gestion de Inventario</h1>
-                    <p class="text-muted mb-0">Dashboard inicial del sistema</p>
-                </div>
-
-                <div class="bg-white border rounded p-3">
-                    <p class="mb-1">
-                        <strong>Usuario:</strong> {{ request.user.username }}
-                    </p>
-                    <p class="mb-0">
-                        <strong>Rol:</strong> {{ rol_usuario }}
-                    </p>
-                </div>
-            </div>
-
-            <div class="row g-3">
-                {% for tarjeta in tarjetas %}
-                    <div class="col-12 col-sm-6 col-xl-3">
-                        <div class="card border-0 shadow-sm h-100">
-                            <div class="card-body">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <div>
-                                        <p class="text-muted mb-1">{{ tarjeta.titulo }}</p>
-                                        <h2 class="h3 mb-0">{{ tarjeta.valor }}</h2>
-                                    </div>
-                                    <span class="badge text-bg-{{ tarjeta.color }}">
-                                        Inicial
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
+<div class="row g-3">
+    {% for tarjeta in tarjetas %}
+        <div class="col-12 col-sm-6 col-xl-3">
+            <div class="metric-card metric-{{ tarjeta.color }}">
+                <div class="d-flex justify-content-between align-items-start gap-3">
+                    <div>
+                        <p class="metric-label mb-0">{{ tarjeta.titulo }}</p>
+                        <h2 class="metric-value">{{ tarjeta.valor }}</h2>
                     </div>
-                {% endfor %}
+                    <span class="metric-pill">Inicial</span>
+                </div>
             </div>
+        </div>
+    {% endfor %}
+</div>
 
-            <section class="mt-4 bg-white border rounded p-4">
+<section class="mt-4">
 
                 {% if es_administrador %}
-                    <h2 class="h5 mb-3">Opciones administrativas</h2>
+                    <div class="mb-3">
+                        <h2 class="h5 mb-1">Opciones administrativas</h2>
+                        <p class="text-muted mb-0">Gestiona catalogos, operaciones y reportes desde un solo lugar.</p>
+                    </div>
 
                     <div class="row g-3">
 
                         <div class="col-12 col-lg-4">
-                            <a class="border rounded p-3 h-100 d-block text-decoration-none text-dark"
+                            <a class="option-card"
                                href="{% url 'productos:producto_list' %}">
-                                Gestionar productos
+                                <p class="option-title">Gestionar productos</p>
+                                <p class="option-text">Consulta existencias, precios y estados del catalogo.</p>
                             </a>
                         </div>
 
                         <div class="col-12 col-lg-4">
-                            <div class="border rounded p-3 h-100">
+                            <div class="option-card">
+                                <p class="option-title">Catalogos base</p>
                                 <a class="d-block text-decoration-none"
                                    href="{% url 'productos:categoria_list' %}">
                                     Gestionar categorias
@@ -125,7 +70,8 @@
                         </div>
 
                         <div class="col-12 col-lg-4">
-                            <div class="border rounded p-3 h-100">
+                            <div class="option-card">
+                                <p class="option-title">Operacion</p>
                                 <a class="d-block text-decoration-none"
                                    href="{% url 'compras:crear_compra' %}">
                                     Registrar compra
@@ -151,19 +97,24 @@
                     </div>
 
                 {% elif es_operador %}
-                    <h2 class="h5 mb-3">Opciones operativas</h2>
+                    <div class="mb-3">
+                        <h2 class="h5 mb-1">Opciones operativas</h2>
+                        <p class="text-muted mb-0">Accesos rapidos para registrar entradas, salidas y revisar stock.</p>
+                    </div>
 
                     <div class="row g-3">
 
                         <div class="col-12 col-lg-4">
-                            <a class="border rounded p-3 h-100 d-block text-decoration-none text-dark"
+                            <a class="option-card"
                                href="{% url 'productos:producto_list' %}">
-                                Ver productos
+                                <p class="option-title">Ver productos</p>
+                                <p class="option-text">Consulta el inventario disponible y productos con stock bajo.</p>
                             </a>
                         </div>
 
                         <div class="col-12 col-lg-4">
-                            <div class="border rounded p-3 h-100">
+                            <div class="option-card">
+                                <p class="option-title">Registrar operaciones</p>
                                 <a class="d-block text-decoration-none"
                                    href="{% url 'compras:crear_compra' %}">
                                     Registrar compra
@@ -177,7 +128,8 @@
                         </div>
 
                         <div class="col-12 col-lg-4">
-                            <div class="border rounded p-3 h-100">
+                            <div class="option-card">
+                                <p class="option-title">Seguimiento</p>
                                 <a class="d-block text-decoration-none"
                                    href="{% url 'compras:lista_movimientos' %}">
                                     Ver movimientos de inventario
@@ -199,9 +151,5 @@
                     </p>
                 {% endif %}
 
-            </section>
-
-        </main>
-    </div>
-</div>
-{% endblock %} 
+</section>
+{% endblock %}
