@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Detalle de venta #{{ venta.id }}</h1>
+
+<p><strong>Cliente:</strong> {{ venta.cliente|default:"Cliente general" }}</p>
+<p><strong>Usuario:</strong> {{ venta.usuario.username }}</p>
+<p><strong>Fecha:</strong> {{ venta.fecha }}</p>
+<p><strong>Observación:</strong> {{ venta.observacion|default:"Sin observación" }}</p>
+
+<h2>Productos vendidos</h2>
+
+<table border="1" cellpadding="8" cellspacing="0" width="100%">
+    <thead>
+        <tr>
+            <th>Producto</th>
+            <th>Cantidad</th>
+            <th>Precio unitario</th>
+            <th>Subtotal</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for detalle in venta.detalles.all %}
+        <tr>
+            <td>{{ detalle.producto.nombre }}</td>
+            <td>{{ detalle.cantidad }}</td>
+            <td>${{ detalle.precio_unitario }}</td>
+            <td>${{ detalle.subtotal }}</td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="4">No hay productos en esta venta.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<br>
+
+<h3>Total: ${{ venta.total }}</h3>
+
+<a href="{% url 'ventas:factura_pdf' venta.id %}">Descargar factura PDF</a>
+<br><br>
+<a href="{% url 'ventas:lista_ventas' %}">Volver a ventas</a>
+{% endblock %} 

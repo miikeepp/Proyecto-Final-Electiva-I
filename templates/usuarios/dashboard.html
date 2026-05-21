@@ -7,26 +7,59 @@
     <div class="row">
         <aside class="col-12 col-md-3 col-lg-2 sidebar p-3">
             <nav class="nav flex-column">
-                <a class="nav-link active" href="{% url 'dashboard' %}">Dashboard</a>
-                <a class="nav-link" href="{% url 'productos:producto_list' %}">Productos</a>
+
+                <a class="nav-link active" href="{% url 'dashboard' %}">
+                    Dashboard
+                </a>
+
+                <a class="nav-link" href="{% url 'productos:producto_list' %}">
+                    Productos
+                </a>
+
                 {% if es_administrador %}
-                    <a class="nav-link" href="{% url 'productos:categoria_list' %}">Categorias</a>
-                    <a class="nav-link" href="{% url 'productos:proveedor_list' %}">Proveedores</a>
+                    <a class="nav-link" href="{% url 'productos:categoria_list' %}">
+                        Categorias
+                    </a>
+
+                    <a class="nav-link" href="{% url 'productos:proveedor_list' %}">
+                        Proveedores
+                    </a>
                 {% endif %}
-                <a class="nav-link" href="#">Compras</a>
-                <a class="nav-link" href="#">Ventas</a>
+
+                <a class="nav-link" href="{% url 'compras:lista_compras' %}">
+                    Compras
+                </a>
+
+                <a class="nav-link" href="{% url 'ventas:lista_ventas' %}">
+                    Ventas
+                </a>
+
                 {% if es_administrador %}
-                    <a class="nav-link" href="#">Reportes</a>
-                    <a class="nav-link" href="/admin/">Administracion</a>
+                    <a class="nav-link" href="{% url 'compras:lista_movimientos' %}">
+                        Movimientos
+                    </a>
+
+                    <a class="nav-link" href="#">
+                        Reportes
+                    </a>
+
+                    <a class="nav-link" href="/admin/">
+                        Administracion
+                    </a>
                 {% endif %}
+
                 <form action="{% url 'logout' %}" method="post" class="mt-2">
                     {% csrf_token %}
-                    <button type="submit" class="btn btn-outline-light w-100 text-start">Cerrar sesion</button>
+                    <button type="submit" class="btn btn-outline-light w-100 text-start">
+                        Cerrar sesion
+                    </button>
                 </form>
+
             </nav>
         </aside>
 
         <main class="col-12 col-md-9 col-lg-10 content-wrapper p-4">
+
             <div class="d-flex flex-column flex-lg-row justify-content-between gap-3 mb-4">
                 <div>
                     <h1 class="h3 mb-1">Sistema de Gestion de Inventario</h1>
@@ -34,8 +67,12 @@
                 </div>
 
                 <div class="bg-white border rounded p-3">
-                    <p class="mb-1"><strong>Usuario:</strong> {{ request.user.username }}</p>
-                    <p class="mb-0"><strong>Rol:</strong> {{ rol_usuario }}</p>
+                    <p class="mb-1">
+                        <strong>Usuario:</strong> {{ request.user.username }}
+                    </p>
+                    <p class="mb-0">
+                        <strong>Rol:</strong> {{ rol_usuario }}
+                    </p>
                 </div>
             </div>
 
@@ -49,7 +86,9 @@
                                         <p class="text-muted mb-1">{{ tarjeta.titulo }}</p>
                                         <h2 class="h3 mb-0">{{ tarjeta.valor }}</h2>
                                     </div>
-                                    <span class="badge text-bg-{{ tarjeta.color }}">Inicial</span>
+                                    <span class="badge text-bg-{{ tarjeta.color }}">
+                                        Inicial
+                                    </span>
                                 </div>
                             </div>
                         </div>
@@ -58,45 +97,107 @@
             </div>
 
             <section class="mt-4 bg-white border rounded p-4">
+
                 {% if es_administrador %}
                     <h2 class="h5 mb-3">Opciones administrativas</h2>
+
                     <div class="row g-3">
+
                         <div class="col-12 col-lg-4">
-                            <a class="border rounded p-3 h-100 d-block text-decoration-none text-dark" href="{% url 'productos:producto_list' %}">
+                            <a class="border rounded p-3 h-100 d-block text-decoration-none text-dark"
+                               href="{% url 'productos:producto_list' %}">
                                 Gestionar productos
                             </a>
                         </div>
+
                         <div class="col-12 col-lg-4">
                             <div class="border rounded p-3 h-100">
-                                <a class="d-block text-decoration-none" href="{% url 'productos:categoria_list' %}">Gestionar categorias</a>
-                                <a class="d-block text-decoration-none mt-2" href="{% url 'productos:proveedor_list' %}">Gestionar proveedores</a>
+                                <a class="d-block text-decoration-none"
+                                   href="{% url 'productos:categoria_list' %}">
+                                    Gestionar categorias
+                                </a>
+
+                                <a class="d-block text-decoration-none mt-2"
+                                   href="{% url 'productos:proveedor_list' %}">
+                                    Gestionar proveedores
+                                </a>
                             </div>
                         </div>
+
                         <div class="col-12 col-lg-4">
-                            <div class="border rounded p-3 h-100">Consultar reportes y usuarios</div>
+                            <div class="border rounded p-3 h-100">
+                                <a class="d-block text-decoration-none"
+                                   href="{% url 'compras:crear_compra' %}">
+                                    Registrar compra
+                                </a>
+
+                                <a class="d-block text-decoration-none mt-2"
+                                   href="{% url 'ventas:crear_venta' %}">
+                                    Registrar venta
+                                </a>
+
+                                <a class="d-block text-decoration-none mt-2"
+                                   href="{% url 'compras:lista_movimientos' %}">
+                                    Ver movimientos de inventario
+                                </a>
+                            </div>
                         </div>
+
                     </div>
+
                 {% elif es_operador %}
                     <h2 class="h5 mb-3">Opciones operativas</h2>
+
                     <div class="row g-3">
+
                         <div class="col-12 col-lg-4">
-                            <a class="border rounded p-3 h-100 d-block text-decoration-none text-dark" href="{% url 'productos:producto_list' %}">
+                            <a class="border rounded p-3 h-100 d-block text-decoration-none text-dark"
+                               href="{% url 'productos:producto_list' %}">
                                 Ver productos
                             </a>
                         </div>
+
                         <div class="col-12 col-lg-4">
-                            <div class="border rounded p-3 h-100">Registrar compras y ventas</div>
+                            <div class="border rounded p-3 h-100">
+                                <a class="d-block text-decoration-none"
+                                   href="{% url 'compras:crear_compra' %}">
+                                    Registrar compra
+                                </a>
+
+                                <a class="d-block text-decoration-none mt-2"
+                                   href="{% url 'ventas:crear_venta' %}">
+                                    Registrar venta
+                                </a>
+                            </div>
                         </div>
+
                         <div class="col-12 col-lg-4">
-                            <div class="border rounded p-3 h-100">Ver movimientos y bajo inventario</div>
+                            <div class="border rounded p-3 h-100">
+                                <a class="d-block text-decoration-none"
+                                   href="{% url 'compras:lista_movimientos' %}">
+                                    Ver movimientos de inventario
+                                </a>
+
+                                <a class="d-block text-decoration-none mt-2"
+                                   href="{% url 'productos:producto_list' %}">
+                                    Consultar stock
+                                </a>
+                            </div>
                         </div>
+
                     </div>
+
                 {% else %}
                     <h2 class="h5 mb-3">Rol pendiente</h2>
-                    <p class="text-muted mb-0">Tu usuario aun no tiene un rol asignado.</p>
+                    <p class="text-muted mb-0">
+                        Tu usuario aun no tiene un rol asignado.
+                    </p>
                 {% endif %}
+
             </section>
+
         </main>
     </div>
 </div>
 {% endblock %}
+
