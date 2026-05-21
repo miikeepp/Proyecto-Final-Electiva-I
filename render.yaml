@@ -10,8 +10,7 @@ services:
     runtime: python
     plan: free
     buildCommand: bash build.sh
-    preDeployCommand: python manage.py migrate --noinput
-    startCommand: python -m gunicorn config.wsgi:application
+    startCommand: python manage.py migrate --noinput && python manage.py crear_roles && python manage.py crear_superusuario_render && python -m gunicorn config.wsgi:application
     envVars:
       - key: DATABASE_URL
         fromDatabase:
@@ -23,3 +22,9 @@ services:
         value: "False"
       - key: WEB_CONCURRENCY
         value: "4"
+      - key: DJANGO_SUPERUSER_USERNAME
+        value: admin
+      - key: DJANGO_SUPERUSER_EMAIL
+        value: admin@example.com
+      - key: DJANGO_SUPERUSER_PASSWORD
+        sync: false
