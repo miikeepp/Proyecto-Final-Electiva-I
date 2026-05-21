@@ -8,6 +8,8 @@ urlpatterns = [
     path('productos/', include('productos.urls')),
     path('compras/', include('compras.urls')),
     path('ventas/', include('ventas.urls')),
+    path('reportes/', include('reportes.urls')), 
+    
 
     # Usuarios / dashboard / login
     path('', include('usuarios.urls')),

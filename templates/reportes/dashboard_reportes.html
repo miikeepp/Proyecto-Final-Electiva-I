@@ -1,0 +1,225 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1>Reportes del sistema</h1>
+            <p class="text-muted">
+                Resumen general del inventario, compras, ventas y movimientos.
+            </p>
+        </div>
+
+        <div>
+            <a href="{% url 'dashboard' %}" class="btn btn-secondary">
+                Volver al dashboard
+            </a>
+
+            <a href="{% url 'reportes:exportar_reporte_excel' %}" class="btn btn-success">
+                Exportar Excel
+            </a>
+        </div>
+    </div>
+
+    <div class="row g-3 mb-4">
+
+        <div class="col-12 col-md-3">
+            <div class="card shadow-sm border-0">
+                <div class="card-body">
+                    <p class="text-muted mb-1">Productos</p>
+                    <h2>{{ total_productos }}</h2>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12 col-md-3">
+            <div class="card shadow-sm border-0">
+                <div class="card-body">
+                    <p class="text-muted mb-1">Compras</p>
+                    <h2>{{ total_compras_registradas }}</h2>
+                    <small>{{ total_compras_dinero_formateado }}</small>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12 col-md-3">
+            <div class="card shadow-sm border-0">
+                <div class="card-body">
+                    <p class="text-muted mb-1">Ventas</p>
+                    <h2>{{ total_ventas_registradas }}</h2>
+                    <small>{{ total_ventas_dinero_formateado }}</small>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12 col-md-3">
+            <div class="card shadow-sm border-0">
+                <div class="card-body">
+                    <p class="text-muted mb-1">Bajo inventario</p>
+                    <h2>{{ total_bajo_stock }}</h2>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="row g-4">
+
+        <div class="col-12 col-lg-6">
+            <div class="bg-white border rounded p-4 h-100">
+                <h2 class="h5 mb-3">Productos más vendidos</h2>
+
+                <table class="table table-bordered table-hover">
+                    <thead>
+                        <tr>
+                            <th>Producto</th>
+                            <th>Cantidad vendida</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for producto in productos_mas_vendidos %}
+                            <tr>
+                                <td>{{ producto.producto__nombre }}</td>
+                                <td>{{ producto.cantidad_vendida }}</td>
+                            </tr>
+                        {% empty %}
+                            <tr>
+                                <td colspan="2">No hay ventas registradas.</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="col-12 col-lg-6">
+            <div class="bg-white border rounded p-4 h-100">
+                <h2 class="h5 mb-3">Productos con bajo inventario</h2>
+
+                <table class="table table-bordered table-hover">
+                    <thead>
+                        <tr>
+                            <th>Producto</th>
+                            <th>Stock</th>
+                            <th>Stock mínimo</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for producto in productos_bajo_stock %}
+                            <tr>
+                                <td>{{ producto.nombre }}</td>
+                                <td>{{ producto.stock }}</td>
+                                <td>{{ producto.stock_minimo }}</td>
+                            </tr>
+                        {% empty %}
+                            <tr>
+                                <td colspan="3">No hay productos con bajo inventario.</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="row g-4 mt-2">
+
+        <div class="col-12 col-lg-6">
+            <div class="bg-white border rounded p-4 h-100">
+                <h2 class="h5 mb-3">Últimas compras</h2>
+
+                <table class="table table-bordered table-hover">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Proveedor</th>
+                            <th>Fecha</th>
+                            <th>Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for compra in ultimas_compras %}
+                            <tr>
+                                <td>{{ compra.id }}</td>
+                                <td>{{ compra.proveedor.nombre }}</td>
+                                <td>{{ compra.fecha }}</td>
+                                <td>${{ compra.total }}</td>
+                            </tr>
+                        {% empty %}
+                            <tr>
+                                <td colspan="4">No hay compras registradas.</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="col-12 col-lg-6">
+            <div class="bg-white border rounded p-4 h-100">
+                <h2 class="h5 mb-3">Últimas ventas</h2>
+
+                <table class="table table-bordered table-hover">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Cliente</th>
+                            <th>Fecha</th>
+                            <th>Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for venta in ultimas_ventas %}
+                            <tr>
+                                <td>{{ venta.id }}</td>
+                                <td>{{ venta.cliente|default:"Cliente general" }}</td>
+                                <td>{{ venta.fecha }}</td>
+                                <td>${{ venta.total }}</td>
+                            </tr>
+                        {% empty %}
+                            <tr>
+                                <td colspan="4">No hay ventas registradas.</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="bg-white border rounded p-4 mt-4">
+        <h2 class="h5 mb-3">Últimos movimientos de inventario</h2>
+
+        <table class="table table-bordered table-hover">
+            <thead>
+                <tr>
+                    <th>Producto</th>
+                    <th>Tipo</th>
+                    <th>Cantidad</th>
+                    <th>Fecha</th>
+                    <th>Descripción</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for movimiento in ultimos_movimientos %}
+                    <tr>
+                        <td>{{ movimiento.producto.nombre }}</td>
+                        <td>{{ movimiento.tipo }}</td>
+                        <td>{{ movimiento.cantidad }}</td>
+                        <td>{{ movimiento.fecha }}</td>
+                        <td>{{ movimiento.descripcion }}</td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="5">No hay movimientos registrados.</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+</div>
+{% endblock %} 

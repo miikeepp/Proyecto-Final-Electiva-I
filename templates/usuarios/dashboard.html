@@ -39,7 +39,7 @@
                         Movimientos
                     </a>
 
-                    <a class="nav-link" href="#">
+                    <a class="nav-link" href="{% url 'reportes:dashboard_reportes' %}">
                         Reportes
                     </a>
 
@@ -140,6 +140,11 @@
                                    href="{% url 'compras:lista_movimientos' %}">
                                     Ver movimientos de inventario
                                 </a>
+
+                                <a class="d-block text-decoration-none mt-2"
+                                   href="{% url 'reportes:dashboard_reportes' %}">
+                                    Ver reportes
+                                </a>
                             </div>
                         </div>
 
@@ -199,5 +204,4 @@
         </main>
     </div>
 </div>
-{% endblock %}
-
+{% endblock %} 
