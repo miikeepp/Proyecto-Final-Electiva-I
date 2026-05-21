@@ -20,7 +20,7 @@ ALLOWED_HOSTS = []
 
 # Aplicaciones instaladas
 INSTALLED_APPS = [
-    # Apps de Django
+   
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -28,11 +28,12 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    # Apps del proyecto
+    
     'usuarios',
     'productos',
     'compras',
     'ventas',
+    'reportes',
 ]
 
 
