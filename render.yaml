@@ -20,6 +20,8 @@ services:
         generateValue: true
       - key: DEBUG
         value: "False"
+      - key: CSRF_TRUSTED_ORIGINS
+        value: "https://*.onrender.com,https://proyecto-final-electiva-i.onrender.com"
       - key: PYTHONUNBUFFERED
         value: "1"
       - key: WEB_CONCURRENCY
