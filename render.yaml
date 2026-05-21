@@ -1,5 +1,6 @@
 databases:
   - name: inventario-db
+    region: virginia
     plan: free
     databaseName: inventario
     user: inventario
@@ -8,6 +9,7 @@ services:
   - type: web
     name: inventario-django
     runtime: python
+    region: virginia
     plan: free
     buildCommand: bash build.sh
     startCommand: bash start.sh
