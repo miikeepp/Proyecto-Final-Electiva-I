@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Compras</h1>
+<p>Listado de compras registradas en el sistema.</p>
+
+<a href="{% url 'compras:crear_compra' %}">
+    Registrar nueva compra
+</a>
+
+<br><br>
+
+<table border="1" cellpadding="8" cellspacing="0" width="100%">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Proveedor</th>
+            <th>Usuario</th>
+            <th>Fecha</th>
+            <th>Total</th>
+            <th>Detalle</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for compra in compras %}
+        <tr>
+            <td>{{ compra.id }}</td>
+            <td>{{ compra.proveedor.nombre }}</td>
+            <td>{{ compra.usuario.username }}</td>
+            <td>{{ compra.fecha }}</td>
+            <td>${{ compra.total }}</td>
+            <td>
+                <a href="{% url 'compras:detalle_compra' compra.id %}">Ver detalle</a>
+            </td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="6">No hay compras registradas.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<br>
+
+<a href="{% url 'compras:lista_movimientos' %}">
+    Ver movimientos de inventario
+</a>
+{% endblock %} 

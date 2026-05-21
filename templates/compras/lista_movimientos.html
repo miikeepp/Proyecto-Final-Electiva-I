@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Movimientos de inventario</h1>
+<p>Historial de entradas y salidas del inventario.</p>
+
+<table border="1" cellpadding="8" cellspacing="0" width="100%">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Producto</th>
+            <th>Tipo</th>
+            <th>Cantidad</th>
+            <th>Fecha</th>
+            <th>Descripción</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for movimiento in movimientos %}
+        <tr>
+            <td>{{ movimiento.id }}</td>
+            <td>{{ movimiento.producto.nombre }}</td>
+            <td>{{ movimiento.tipo }}</td>
+            <td>{{ movimiento.cantidad }}</td>
+            <td>{{ movimiento.fecha }}</td>
+            <td>{{ movimiento.descripcion }}</td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="6">No hay movimientos registrados.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<br>
+
+<a href="{% url 'compras:lista_compras' %}">Volver a compras</a>
+{% endblock %} 
