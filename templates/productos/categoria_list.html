@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+
+{% block title %}Categorias{% endblock %}
+
+{% block content %}
+{% if messages %}
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags|default:'info' }} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+        </div>
+    {% endfor %}
+{% endif %}
+
+<div class="page-header">
+    <div>
+        <p class="page-kicker">Catalogo</p>
+        <h1 class="page-title">Categorias</h1>
+        <p class="page-subtitle">Gestion de categorias para organizar los productos.</p>
+    </div>
+    <div class="d-flex flex-wrap gap-2">
+        <a class="btn btn-outline-secondary" href="{% url 'productos:producto_list' %}">Productos</a>
+        <a class="btn btn-primary" href="{% url 'productos:categoria_create' %}">Crear categoria</a>
+    </div>
+</div>
+
+<section class="surface-card mb-4">
+    <form method="get" class="row g-3 align-items-end">
+        <div class="col-12 col-lg-10">
+            <label class="form-label" for="buscar">Buscar</label>
+            <input class="form-control" type="search" id="buscar" name="q" value="{{ buscar }}" placeholder="Nombre o descripcion">
+        </div>
+        <div class="col-12 col-lg-2 d-grid">
+            <button class="btn btn-dark" type="submit">Buscar</button>
+        </div>
+    </form>
+</section>
+
+<section class="surface-card p-0 overflow-hidden">
+    <div class="d-flex flex-column flex-md-row justify-content-between gap-2 p-3 border-bottom">
+        <div>
+            <h2 class="h5 mb-1">Listado de categorias</h2>
+            <p class="text-muted mb-0">Clasificacion principal del catalogo de productos.</p>
+        </div>
+        <span class="badge text-bg-light border align-self-start">{{ categorias|length }} registros</span>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+            <thead class="table-light">
+                <tr>
+                    <th>Nombre</th>
+                    <th>Descripcion</th>
+                    <th>Estado</th>
+                    <th class="text-end">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for categoria in categorias %}
+                    <tr>
+                        <td class="fw-semibold">{{ categoria.nombre }}</td>
+                        <td>{{ categoria.descripcion|default:'Sin descripcion' }}</td>
+                        <td>
+                            {% if categoria.activo %}
+                                <span class="badge text-bg-success">Activo</span>
+                            {% else %}
+                                <span class="badge text-bg-secondary">Inactivo</span>
+                            {% endif %}
+                        </td>
+                        <td class="text-end">
+                            <div class="btn-group btn-group-sm" role="group" aria-label="Acciones de categoria">
+                                <a class="btn btn-outline-secondary" href="{% url 'productos:categoria_update' categoria.pk %}">Editar</a>
+                                <a class="btn btn-outline-danger" href="{% url 'productos:categoria_delete' categoria.pk %}">Eliminar</a>
+                            </div>
+                        </td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="4" class="text-center text-muted py-4">No hay categorias registradas.</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>
+{% endblock %}

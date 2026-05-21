@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Detalle de compra #{{ compra.id }}</h1>
+
+<p><strong>Proveedor:</strong> {{ compra.proveedor.nombre }}</p>
+<p><strong>Usuario:</strong> {{ compra.usuario.username }}</p>
+<p><strong>Fecha:</strong> {{ compra.fecha }}</p>
+<p><strong>Observación:</strong> {{ compra.observacion|default:"Sin observación" }}</p>
+
+<h2>Productos comprados</h2>
+
+<table border="1" cellpadding="8" cellspacing="0" width="100%">
+    <thead>
+        <tr>
+            <th>Producto</th>
+            <th>Cantidad</th>
+            <th>Precio unitario</th>
+            <th>Subtotal</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for detalle in compra.detalles.all %}
+        <tr>
+            <td>{{ detalle.producto.nombre }}</td>
+            <td>{{ detalle.cantidad }}</td>
+            <td>${{ detalle.precio_unitario }}</td>
+            <td>${{ detalle.subtotal }}</td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="4">No hay productos en esta compra.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<br>
+
+<h3>Total: ${{ compra.total }}</h3>
+
+<a href="{% url 'compras:lista_compras' %}">Volver a compras</a>
+{% endblock %} 

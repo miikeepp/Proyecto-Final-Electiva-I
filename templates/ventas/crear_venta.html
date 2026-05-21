@@ -1,0 +1,192 @@
+{% extends 'base.html' %}
+{% load l10n %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1>Registrar venta</h1>
+    <p>Registra una salida de inventario por venta.</p>
+
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-info">
+                <strong>{{ message }}</strong>
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    <form method="POST" class="bg-white border rounded p-4">
+        {% csrf_token %}
+
+        <div class="mb-3">
+            <label class="form-label">Cliente:</label>
+            <input 
+                type="text" 
+                name="cliente" 
+                class="form-control" 
+                placeholder="Cliente general"
+            >
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Producto:</label>
+            <select name="producto" id="producto" class="form-select" required>
+                <option value="">Seleccione un producto</option>
+
+                {% for producto in productos %}
+                    <option 
+                        value="{{ producto.id }}"
+                        data-precio="{{ producto.precio_venta|unlocalize }}"
+                        data-stock="{{ producto.stock }}"
+                    >
+                        {{ producto.nombre }} - Stock: {{ producto.stock }} - Precio venta: ${{ producto.precio_venta|floatformat:0 }} COP
+                    </option>
+                {% endfor %}
+            </select>
+
+            <small class="text-muted">
+                Seleccione el producto que desea vender.
+            </small>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Cantidad:</label>
+            <input 
+                type="number" 
+                name="cantidad" 
+                id="cantidad"
+                class="form-control" 
+                min="1" 
+                required
+            >
+            <small id="stock_disponible" class="text-muted">
+                Stock disponible según el producto seleccionado.
+            </small>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Precio unitario COP:</label>
+            <input 
+                type="number" 
+                name="precio_unitario" 
+                id="precio_unitario"
+                class="form-control" 
+                min="0" 
+                step="1" 
+                placeholder="Ej: 25000" 
+                required
+            >
+
+            <small id="precio_formateado" class="text-muted">
+                Ingrese el valor en pesos colombianos, sin puntos ni comas.
+            </small>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Observación:</label>
+            <textarea 
+                name="observacion" 
+                class="form-control" 
+                rows="3"
+            ></textarea>
+        </div>
+
+        <button type="submit" class="btn btn-primary">
+            Guardar venta
+        </button>
+
+        <a href="{% url 'ventas:lista_ventas' %}" class="btn btn-secondary">
+            Cancelar
+        </a>
+    </form>
+</div>
+
+<script>
+    const productoSelect = document.getElementById('producto');
+    const precioInput = document.getElementById('precio_unitario');
+    const precioFormateado = document.getElementById('precio_formateado');
+    const cantidadInput = document.getElementById('cantidad');
+    const stockDisponible = document.getElementById('stock_disponible');
+
+    function limpiarNumero(valor) {
+        if (!valor) {
+            return 0;
+        }
+
+        valor = valor.toString();
+
+        valor = valor.replace(/\./g, '').replace(',', '.');
+
+        return Number(valor);
+    }
+
+    function formatearCOP(valor) {
+        valor = limpiarNumero(valor);
+
+        if (isNaN(valor) || valor <= 0) {
+            return 'Ingrese el valor en pesos colombianos, sin puntos ni comas.';
+        }
+
+        return new Intl.NumberFormat('es-CO', {
+            style: 'currency',
+            currency: 'COP',
+            maximumFractionDigits: 0
+        }).format(valor);
+    }
+
+    function cargarDatosProducto() {
+        const opcionSeleccionada = productoSelect.options[productoSelect.selectedIndex];
+
+        if (!opcionSeleccionada || !opcionSeleccionada.value) {
+            precioInput.value = '';
+            cantidadInput.value = '';
+            cantidadInput.removeAttribute('max');
+
+            precioFormateado.textContent = 'Ingrese el valor en pesos colombianos, sin puntos ni comas.';
+            stockDisponible.textContent = 'Stock disponible según el producto seleccionado.';
+            return;
+        }
+
+        const precio = opcionSeleccionada.getAttribute('data-precio');
+        const stock = opcionSeleccionada.getAttribute('data-stock');
+
+        const precioEntero = Math.round(limpiarNumero(precio));
+
+        precioInput.value = precioEntero;
+        precioFormateado.textContent = formatearCOP(precioEntero);
+
+        cantidadInput.value = '';
+        cantidadInput.setAttribute('max', stock);
+
+        stockDisponible.textContent = `Stock disponible: ${stock} unidades.`;
+    }
+
+    productoSelect.addEventListener('change', cargarDatosProducto);
+
+    precioInput.addEventListener('input', function () {
+        precioFormateado.textContent = formatearCOP(precioInput.value);
+    });
+
+    cantidadInput.addEventListener('input', function () {
+        const opcionSeleccionada = productoSelect.options[productoSelect.selectedIndex];
+
+        if (!opcionSeleccionada || !opcionSeleccionada.value) {
+            return;
+        }
+
+        const stock = Number(opcionSeleccionada.getAttribute('data-stock'));
+        const cantidad = Number(cantidadInput.value);
+
+        if (cantidad > stock) {
+            stockDisponible.textContent = `No puedes vender más de ${stock} unidades disponibles.`;
+            stockDisponible.classList.remove('text-muted');
+            stockDisponible.classList.add('text-danger');
+        } else {
+            stockDisponible.textContent = `Stock disponible: ${stock} unidades.`;
+            stockDisponible.classList.remove('text-danger');
+            stockDisponible.classList.add('text-muted');
+        }
+    });
+
+    cargarDatosProducto();
+</script>
+{% endblock %} 

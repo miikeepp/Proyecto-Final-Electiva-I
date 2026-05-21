@@ -1,0 +1,175 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1>Registrar compra</h1>
+    <p>Registra una entrada de inventario por compra.</p>
+
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-info">
+                <strong>{{ message }}</strong>
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    <form method="POST" class="bg-white border rounded p-4">
+        {% csrf_token %}
+
+        <div class="mb-3">
+            <label class="form-label">Proveedor:</label>
+            <select name="proveedor" id="proveedor" class="form-select" required>
+                <option value="">Seleccione un proveedor</option>
+                {% for proveedor in proveedores %}
+                    <option value="{{ proveedor.id }}">
+                        {{ proveedor.nombre }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Producto:</label>
+            <select name="producto" id="producto" class="form-select" required>
+                <option value="">Seleccione un producto</option>
+
+                {% for producto in productos %}
+                    <option 
+                        value="{{ producto.id }}"
+                        data-proveedor="{{ producto.proveedor.id }}"
+                        data-precio="{{ producto.precio_compra|floatformat:0 }}"
+                    >
+                        {{ producto.nombre }} - Stock actual: {{ producto.stock }} - Precio compra: ${{ producto.precio_compra|floatformat:0 }} COP
+                    </option>
+                {% endfor %}
+            </select>
+
+            <small class="text-muted">
+                Se mostrarán únicamente los productos asociados al proveedor seleccionado.
+            </small>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Cantidad:</label>
+            <input 
+                type="number" 
+                name="cantidad" 
+                class="form-control" 
+                min="1" 
+                required
+            >
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Precio unitario COP:</label>
+            <input 
+                type="number" 
+                name="precio_unitario" 
+                id="precio_unitario_compra"
+                class="form-control" 
+                min="0" 
+                step="1" 
+                placeholder="Ej: 25000" 
+                required
+            >
+
+            <small id="precio_compra_formateado" class="text-muted">
+                Ingrese el valor en pesos colombianos, sin puntos ni comas.
+            </small>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Observación:</label>
+            <textarea 
+                name="observacion" 
+                class="form-control" 
+                rows="3"
+            ></textarea>
+        </div>
+
+        <button type="submit" class="btn btn-primary">
+            Guardar compra
+        </button>
+
+        <a href="{% url 'compras:lista_compras' %}" class="btn btn-secondary">
+            Cancelar
+        </a>
+    </form>
+</div>
+
+<script>
+    const proveedorSelect = document.getElementById('proveedor');
+    const productoSelect = document.getElementById('producto');
+    const precioCompraInput = document.getElementById('precio_unitario_compra');
+    const precioCompraFormateado = document.getElementById('precio_compra_formateado');
+
+    const productosOriginales = Array.from(productoSelect.options).filter(option => option.value !== '');
+
+    function formatearCOP(valor) {
+        valor = Number(valor);
+
+        if (isNaN(valor) || valor <= 0) {
+            return 'Ingrese el valor en pesos colombianos, sin puntos ni comas.';
+        }
+
+        return new Intl.NumberFormat('es-CO', {
+            style: 'currency',
+            currency: 'COP',
+            maximumFractionDigits: 0
+        }).format(valor);
+    }
+
+    function limpiarProductos() {
+        productoSelect.innerHTML = '';
+
+        const opcionInicial = document.createElement('option');
+        opcionInicial.value = '';
+        opcionInicial.textContent = 'Seleccione un producto';
+
+        productoSelect.appendChild(opcionInicial);
+    }
+
+    function filtrarProductosPorProveedor() {
+        const proveedorSeleccionado = proveedorSelect.value;
+
+        limpiarProductos();
+
+        productosOriginales.forEach(option => {
+            const proveedorProducto = option.getAttribute('data-proveedor');
+
+            if (proveedorProducto === proveedorSeleccionado) {
+                const nuevaOpcion = option.cloneNode(true);
+                productoSelect.appendChild(nuevaOpcion);
+            }
+        });
+
+        precioCompraInput.value = '';
+        precioCompraFormateado.textContent = 'Ingrese el valor en pesos colombianos, sin puntos ni comas.';
+    }
+
+    function cargarPrecioProducto() {
+        const opcionSeleccionada = productoSelect.options[productoSelect.selectedIndex];
+
+        if (!opcionSeleccionada || !opcionSeleccionada.getAttribute('data-precio')) {
+            precioCompraInput.value = '';
+            precioCompraFormateado.textContent = 'Ingrese el valor en pesos colombianos, sin puntos ni comas.';
+            return;
+        }
+
+        const precio = opcionSeleccionada.getAttribute('data-precio');
+
+        precioCompraInput.value = precio;
+        precioCompraFormateado.textContent = formatearCOP(precio);
+    }
+
+    proveedorSelect.addEventListener('change', filtrarProductosPorProveedor);
+    productoSelect.addEventListener('change', cargarPrecioProducto);
+
+    precioCompraInput.addEventListener('input', function () {
+        precioCompraFormateado.textContent = formatearCOP(precioCompraInput.value);
+    });
+
+    filtrarProductosPorProveedor();
+</script>
+{% endblock %} 
+

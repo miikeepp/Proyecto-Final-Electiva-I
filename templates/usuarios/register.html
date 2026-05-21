@@ -1,0 +1,482 @@
+{% extends 'base.html' %}
+
+{% block title %}Inventario - Registro de Cuenta{% endblock %}
+{% block navbar %}{% endblock %}
+
+{% block layout %}
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+
+<style>
+    .auth-stitch,
+    .auth-stitch * {
+        box-sizing: border-box;
+    }
+
+    .auth-stitch {
+        --bg: #051424;
+        --panel: #0f172a;
+        --field: #122131;
+        --field-high: #1c2b3c;
+        --border: #45464d;
+        --text: #d4e4fa;
+        --muted: #c6c6cd;
+        --soft: #798098;
+        --cyan: #7bd0ff;
+        --cyan-strong: #00a6e0;
+        --cyan-text: #00374d;
+        --danger-bg: #93000a;
+        --danger-text: #ffdad6;
+        min-height: 100vh;
+        margin: 0;
+        background: var(--bg);
+        color: var(--text);
+        display: flex;
+        font-family: Inter, Arial, sans-serif;
+    }
+
+    .auth-pane {
+        position: relative;
+        width: 50%;
+        min-height: 100vh;
+        background: var(--panel);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        padding: 96px 64px 82px;
+        overflow: hidden;
+    }
+
+    .auth-brand {
+        position: absolute;
+        top: 24px;
+        left: 32px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        color: var(--text);
+        text-decoration: none;
+    }
+
+    .auth-brand .material-symbols-outlined {
+        color: var(--cyan);
+        font-size: 32px;
+        font-variation-settings: 'FILL' 1, 'wght' 500, 'GRAD' 0, 'opsz' 24;
+    }
+
+    .auth-brand span:last-child {
+        font-size: 32px;
+        line-height: 1;
+        font-weight: 700;
+    }
+
+    .auth-card {
+        width: min(480px, 100%);
+        margin: 0 auto;
+    }
+
+    .auth-copy {
+        margin-bottom: 40px;
+    }
+
+    .auth-copy h1 {
+        margin: 0 0 8px;
+        color: var(--text);
+        font-size: 32px;
+        line-height: 1.25;
+        font-weight: 600;
+    }
+
+    .auth-copy p {
+        margin: 0;
+        color: var(--soft);
+        font-size: 18px;
+        line-height: 1.55;
+    }
+
+    .auth-form {
+        display: grid;
+        gap: 24px;
+    }
+
+    .auth-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 24px;
+    }
+
+    .auth-field {
+        display: grid;
+        gap: 8px;
+    }
+
+    .auth-label {
+        color: var(--muted);
+        font-size: 14px;
+        line-height: 1.4;
+        font-weight: 500;
+        text-transform: uppercase;
+    }
+
+    .auth-input {
+        width: 100%;
+        min-height: 48px;
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        background: var(--field);
+        color: var(--text);
+        padding: 12px 24px;
+        font: inherit;
+        transition: border-color 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+    }
+
+    .auth-input::placeholder {
+        color: var(--soft);
+    }
+
+    .auth-input:focus {
+        outline: none;
+        border-color: var(--cyan);
+        background: var(--field-high);
+        box-shadow: 0 0 0 2px rgba(123, 208, 255, 0.2);
+    }
+
+    .auth-input.is-invalid {
+        border-color: #ffb4ab;
+    }
+
+    .auth-button {
+        width: 100%;
+        min-height: 56px;
+        border: 0;
+        border-radius: 8px;
+        background: var(--cyan-strong);
+        color: var(--cyan-text);
+        font-size: 24px;
+        line-height: 1.3;
+        font-weight: 600;
+        cursor: pointer;
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
+        gap: 8px;
+        transform: scale(0.98);
+        transition: transform 0.16s ease, background 0.16s ease;
+    }
+
+    .auth-button:hover {
+        background: var(--cyan);
+        transform: scale(1);
+    }
+
+    .auth-button:active {
+        transform: scale(0.98);
+    }
+
+    .auth-link {
+        color: var(--cyan);
+        font-weight: 700;
+        text-decoration: none;
+    }
+
+    .auth-link:hover {
+        text-decoration: underline;
+    }
+
+    .auth-footer-text {
+        margin: 24px 0 0;
+        color: var(--muted);
+        text-align: center;
+        font-size: 16px;
+        line-height: 1.5;
+    }
+
+    .auth-alert,
+    .field-error {
+        color: var(--danger-text);
+        font-size: 12px;
+        line-height: 1.35;
+        font-weight: 500;
+    }
+
+    .auth-alert {
+        display: flex;
+        gap: 8px;
+        align-items: flex-start;
+        padding: 12px;
+        border-radius: 8px;
+        background: var(--danger-bg);
+    }
+
+    .auth-visual {
+        position: relative;
+        width: 50%;
+        min-height: 100vh;
+        overflow: hidden;
+        background: var(--bg);
+        display: flex;
+        align-items: flex-end;
+    }
+
+    .auth-visual::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        z-index: 1;
+        background: linear-gradient(to top, rgba(5, 20, 36, 0.86), rgba(5, 20, 36, 0.2), rgba(5, 20, 36, 0));
+    }
+
+    .auth-visual img {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+    }
+
+    .auth-visual-copy {
+        position: relative;
+        z-index: 2;
+        width: min(520px, calc(100% - 128px));
+        margin: 0 0 128px 64px;
+    }
+
+    .visual-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 4px 12px;
+        margin-bottom: 24px;
+        border: 1px solid rgba(123, 208, 255, 0.3);
+        border-radius: 999px;
+        background: rgba(0, 166, 224, 0.2);
+        color: var(--cyan);
+        backdrop-filter: blur(16px);
+        font-size: 12px;
+        line-height: 1.35;
+        font-weight: 500;
+        text-transform: uppercase;
+    }
+
+    .auth-visual-copy h2 {
+        margin: 0 0 24px;
+        color: var(--text);
+        font-size: 48px;
+        line-height: 1.17;
+        font-weight: 700;
+    }
+
+    .auth-visual-copy p {
+        margin: 0;
+        color: var(--muted);
+        font-size: 18px;
+        line-height: 1.55;
+    }
+
+    .auth-meta {
+        position: absolute;
+        left: 32px;
+        right: 32px;
+        bottom: 24px;
+        z-index: 3;
+        display: flex;
+        align-items: center;
+        gap: 24px;
+        color: var(--muted);
+        font-size: 12px;
+        line-height: 1.35;
+    }
+
+    .auth-meta-links {
+        display: flex;
+        gap: 24px;
+    }
+
+    .auth-meta a {
+        color: var(--muted);
+        text-decoration: none;
+    }
+
+    .auth-meta a:hover {
+        color: var(--cyan);
+    }
+
+    @media (max-width: 991.98px) {
+        .auth-stitch {
+            display: block;
+        }
+
+        .auth-pane {
+            width: 100%;
+            padding: 92px 24px 132px;
+        }
+
+        .auth-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .auth-visual {
+            display: none;
+        }
+
+        .auth-brand {
+            left: 24px;
+        }
+
+        .auth-brand span:last-child {
+            font-size: 28px;
+        }
+
+        .auth-copy h1 {
+            font-size: 28px;
+        }
+
+        .auth-copy p {
+            font-size: 16px;
+        }
+
+        .auth-meta {
+            left: 24px;
+            right: 24px;
+            flex-wrap: wrap;
+            justify-content: center;
+            text-align: center;
+        }
+    }
+</style>
+
+<main class="auth-stitch">
+    <section class="auth-pane" aria-label="Registro de usuario">
+        <a class="auth-brand" href="{% url 'login' %}" aria-label="Inventario">
+            <span class="material-symbols-outlined">inventory_2</span>
+            <span>Inventario</span>
+        </a>
+
+        <div class="auth-card">
+            <div class="auth-copy">
+                <h1>Gestiona tu inventario de forma inteligente</h1>
+                <p>Controla productos, compras, ventas y stock desde un solo lugar.</p>
+            </div>
+
+            <form class="auth-form" method="post" novalidate>
+                {% csrf_token %}
+
+                {% if form.errors %}
+                    <div class="auth-alert" role="alert">
+                        <span class="material-symbols-outlined" aria-hidden="true">error</span>
+                        <span>Por favor, corrige los errores detallados a continuacion.</span>
+                    </div>
+                {% endif %}
+
+                {% if form.non_field_errors %}
+                    <div class="auth-alert" role="alert">{{ form.non_field_errors }}</div>
+                {% endif %}
+
+                <div class="auth-field">
+                    <label class="auth-label" for="{{ form.username.id_for_label }}">Nombre de usuario</label>
+                    <input
+                        class="auth-input {% if form.username.errors %}is-invalid{% endif %}"
+                        id="{{ form.username.id_for_label }}"
+                        name="{{ form.username.html_name }}"
+                        placeholder="Usuario"
+                        type="text"
+                        autocomplete="username"
+                        value="{{ form.username.value|default:'' }}"
+                        required
+                    >
+                    {% for error in form.username.errors %}
+                        <div class="field-error">{{ error }}</div>
+                    {% endfor %}
+                </div>
+
+                <div class="auth-field">
+                    <label class="auth-label" for="{{ form.email.id_for_label }}">Correo</label>
+                    <input
+                        class="auth-input {% if form.email.errors %}is-invalid{% endif %}"
+                        id="{{ form.email.id_for_label }}"
+                        name="{{ form.email.html_name }}"
+                        placeholder="ejemplo@correo.com"
+                        type="email"
+                        autocomplete="email"
+                        value="{{ form.email.value|default:'' }}"
+                        required
+                    >
+                    {% for error in form.email.errors %}
+                        <div class="field-error">{{ error }}</div>
+                    {% endfor %}
+                </div>
+
+                <div class="auth-grid">
+                    <div class="auth-field">
+                        <label class="auth-label" for="{{ form.password1.id_for_label }}">Contrasena</label>
+                        <input
+                            class="auth-input {% if form.password1.errors %}is-invalid{% endif %}"
+                            id="{{ form.password1.id_for_label }}"
+                            name="{{ form.password1.html_name }}"
+                            placeholder="********"
+                            type="password"
+                            autocomplete="new-password"
+                            required
+                        >
+                        {% for error in form.password1.errors %}
+                            <div class="field-error">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+
+                    <div class="auth-field">
+                        <label class="auth-label" for="{{ form.password2.id_for_label }}">Confirmar contrasena</label>
+                        <input
+                            class="auth-input {% if form.password2.errors %}is-invalid{% endif %}"
+                            id="{{ form.password2.id_for_label }}"
+                            name="{{ form.password2.html_name }}"
+                            placeholder="********"
+                            type="password"
+                            autocomplete="new-password"
+                            required
+                        >
+                        {% for error in form.password2.errors %}
+                            <div class="field-error">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <button class="auth-button" type="submit">Crear cuenta</button>
+
+                <p class="auth-footer-text">
+                    Ya tienes cuenta?
+                    <a class="auth-link" href="{% url 'login' %}">Inicia sesion</a>
+                </p>
+            </form>
+        </div>
+
+        <footer class="auth-meta">
+            <span>© 2024 Inventario SaaS. All rights reserved.</span>
+            <div class="auth-meta-links">
+                <a href="#">Help</a>
+                <a href="#">Terms &amp; Conditions</a>
+                <a href="#">Legal</a>
+                <a href="#">Contact</a>
+            </div>
+        </footer>
+    </section>
+
+    <section class="auth-visual" aria-label="Contexto visual de inventario">
+        <img
+            src="https://lh3.googleusercontent.com/aida-public/AB6AXuBFd5m9HYUVvI-gpq38q1UlhVcvFCHHoS1lzecgvSGJ1X_c7d0iqKQGmnQDiG7FUoZufv2FUP1A9tGvyD-0ufpF3HBi9o13kaJ7C8HDFy4awrCGsVnZiHAiZW3iPxAokoyzqFSrDOZ5VAu9T0TrXK6zajsQnflq71w2ltOkvPizBwRibxJ7FyBumjkNrevyCtFcYvo6aiNgT8qzgImUCwbEqCJZ8OB-heKRFq_WqtYbQLlPFVXk0sGztG4trNUPjWKtawypVWjD1g"
+            alt="Almacen industrial profesional con sistemas automatizados"
+        >
+
+        <div class="auth-visual-copy">
+            <div class="visual-badge">
+                <span class="material-symbols-outlined">speed</span>
+                <span>Eficiencia Operativa</span>
+            </div>
+            <h2>Optimiza cada movimiento de tu almacen.</h2>
+            <p>Nuestra plataforma utiliza tecnologia de punta para asegurar que nunca pierdas el rastro de tus activos mas valiosos.</p>
+        </div>
+    </section>
+</main>
+{% endblock %}

@@ -1,0 +1,398 @@
+[
+{
+    "model": "productos.categoria",
+    "pk": 1,
+    "fields": {
+        "nombre": "Abarrotes",
+        "descripcion": "Productos básicos de tienda y consumo diario",
+        "activo": true,
+        "fecha_creacion": "2026-05-17T02:29:03.654Z"
+    }
+},
+{
+    "model": "productos.categoria",
+    "pk": 2,
+    "fields": {
+        "nombre": "Computadores",
+        "descripcion": "Equipos de cómputo como portátiles, computadores de escritorio y accesorios principales.",
+        "activo": true,
+        "fecha_creacion": "2026-05-17T02:54:26.613Z"
+    }
+},
+{
+    "model": "productos.categoria",
+    "pk": 3,
+    "fields": {
+        "nombre": "Papelería",
+        "descripcion": "Útiles de oficina y estudio como cuadernos, lapiceros, carpetas y hojas.",
+        "activo": true,
+        "fecha_creacion": "2026-05-17T02:54:38.325Z"
+    }
+},
+{
+    "model": "productos.proveedor",
+    "pk": 1,
+    "fields": {
+        "nombre": "Proveedor General",
+        "nit": "1020099067",
+        "telefono": "3001234567",
+        "correo": "proveedor@gmail.com",
+        "direccion": "Pasto, Nariño",
+        "contacto": "3164379812",
+        "activo": true,
+        "fecha_creacion": "2026-05-17T02:31:14.428Z"
+    }
+},
+{
+    "model": "productos.proveedor",
+    "pk": 2,
+    "fields": {
+        "nombre": "TecnoSuministros",
+        "nit": "102015945",
+        "telefono": "3157894561",
+        "correo": "ventas@tecnosuministros.com",
+        "direccion": "Calle 18 #25-40",
+        "contacto": "3157894561",
+        "activo": true,
+        "fecha_creacion": "2026-05-17T03:00:01.253Z"
+    }
+},
+{
+    "model": "productos.proveedor",
+    "pk": 3,
+    "fields": {
+        "nombre": "Papelería Distribuciones",
+        "nit": "1098899067",
+        "telefono": "3204567890",
+        "correo": "contacto@distribucionesandina.com",
+        "direccion": "Carrera 22 #16-35,",
+        "contacto": "3204567890",
+        "activo": true,
+        "fecha_creacion": "2026-05-17T03:01:16.135Z"
+    }
+},
+{
+    "model": "productos.producto",
+    "pk": 1,
+    "fields": {
+        "codigo": "P001",
+        "nombre": "Arroz Diana",
+        "descripcion": "Arroz blanco libra para consumo básico.",
+        "categoria": 1,
+        "proveedor": 1,
+        "precio_compra": "2500.00",
+        "precio_venta": "3200.00",
+        "stock": 10,
+        "stock_minimo": 5,
+        "activo": true,
+        "fecha_creacion": "2026-05-17T02:34:24.187Z",
+        "fecha_actualizacion": "2026-05-17T02:34:24.187Z"
+    }
+},
+{
+    "model": "productos.producto",
+    "pk": 2,
+    "fields": {
+        "codigo": "P002",
+        "nombre": "Aceite Premier",
+        "descripcion": "Aceite vegetal de 1 litro.",
+        "categoria": 1,
+        "proveedor": 1,
+        "precio_compra": "7000.00",
+        "precio_venta": "8500.00",
+        "stock": 11,
+        "stock_minimo": 3,
+        "activo": true,
+        "fecha_creacion": "2026-05-17T02:35:57.005Z",
+        "fecha_actualizacion": "2026-05-21T00:45:04.105Z"
+    }
+},
+{
+    "model": "productos.producto",
+    "pk": 3,
+    "fields": {
+        "codigo": "P003",
+        "nombre": "Azúcar Manuelita",
+        "descripcion": "Azúcar blanca libra.",
+        "categoria": 1,
+        "proveedor": 1,
+        "precio_compra": "2200.00",
+        "precio_venta": "3000.00",
+        "stock": 12,
+        "stock_minimo": 2,
+        "activo": true,
+        "fecha_creacion": "2026-05-17T02:36:40.805Z",
+        "fecha_actualizacion": "2026-05-17T02:36:40.805Z"
+    }
+},
+{
+    "model": "productos.producto",
+    "pk": 4,
+    "fields": {
+        "codigo": "P004",
+        "nombre": "Panela Redonda",
+        "descripcion": "Panela tradicional para bebidas y cocina.",
+        "categoria": 1,
+        "proveedor": 1,
+        "precio_compra": "1800.00",
+        "precio_venta": "2500.00",
+        "stock": 6,
+        "stock_minimo": 5,
+        "activo": true,
+        "fecha_creacion": "2026-05-17T02:37:30.737Z",
+        "fecha_actualizacion": "2026-05-21T00:48:43.674Z"
+    }
+},
+{
+    "model": "productos.producto",
+    "pk": 5,
+    "fields": {
+        "codigo": "P005",
+        "nombre": "Café Águila Roja",
+        "descripcion": "Café molido presentación pequeña.",
+        "categoria": 1,
+        "proveedor": 1,
+        "precio_compra": "5200.00",
+        "precio_venta": "6500.00",
+        "stock": 12,
+        "stock_minimo": 0,
+        "activo": true,
+        "fecha_creacion": "2026-05-17T02:38:15.870Z",
+        "fecha_actualizacion": "2026-05-20T19:48:53.166Z"
+    }
+},
+{
+    "model": "productos.producto",
+    "pk": 6,
+    "fields": {
+        "codigo": "P006",
+        "nombre": "Lenteja",
+        "descripcion": "Lenteja seca por libra.",
+        "categoria": 1,
+        "proveedor": 1,
+        "precio_compra": "3500.00",
+        "precio_venta": "4500.00",
+        "stock": 9,
+        "stock_minimo": 4,
+        "activo": true,
+        "fecha_creacion": "2026-05-17T02:38:51.186Z",
+        "fecha_actualizacion": "2026-05-17T02:38:51.186Z"
+    }
+},
+{
+    "model": "productos.producto",
+    "pk": 7,
+    "fields": {
+        "codigo": "P007",
+        "nombre": "Pasta Doria",
+        "descripcion": "Pasta alimenticia de 250 gramos.",
+        "categoria": 1,
+        "proveedor": 1,
+        "precio_compra": "2000.00",
+        "precio_venta": "2800.00",
+        "stock": 4,
+        "stock_minimo": 5,
+        "activo": true,
+        "fecha_creacion": "2026-05-17T02:39:53.075Z",
+        "fecha_actualizacion": "2026-05-21T00:49:35.425Z"
+    }
+},
+{
+    "model": "productos.producto",
+    "pk": 8,
+    "fields": {
+        "codigo": "P008",
+        "nombre": "Sal Refisal",
+        "descripcion": "Sal refinada de cocina.",
+        "categoria": 1,
+        "proveedor": 1,
+        "precio_compra": "1200.00",
+        "precio_venta": "1800.00",
+        "stock": 20,
+        "stock_minimo": 6,
+        "activo": true,
+        "fecha_creacion": "2026-05-17T02:41:09.084Z",
+        "fecha_actualizacion": "2026-05-17T02:41:09.085Z"
+    }
+},
+{
+    "model": "productos.producto",
+    "pk": 9,
+    "fields": {
+        "codigo": "C001",
+        "nombre": "Portátil Lenovo IdeaPad 3",
+        "descripcion": "Computador portátil para estudio, oficina y tareas básicas.",
+        "categoria": 2,
+        "proveedor": 2,
+        "precio_compra": "1450000.00",
+        "precio_venta": "1750000.00",
+        "stock": 5,
+        "stock_minimo": 2,
+        "activo": true,
+        "fecha_creacion": "2026-05-17T03:03:25.394Z",
+        "fecha_actualizacion": "2026-05-17T03:03:25.394Z"
+    }
+},
+{
+    "model": "productos.producto",
+    "pk": 10,
+    "fields": {
+        "codigo": "C002",
+        "nombre": "Computador de escritorio HP",
+        "descripcion": "Equipo de escritorio para oficina con buen rendimiento general.",
+        "categoria": 2,
+        "proveedor": 2,
+        "precio_compra": "1200000.00",
+        "precio_venta": "1500000.00",
+        "stock": 4,
+        "stock_minimo": 2,
+        "activo": true,
+        "fecha_creacion": "2026-05-17T03:04:23.598Z",
+        "fecha_actualizacion": "2026-05-17T03:04:23.598Z"
+    }
+},
+{
+    "model": "productos.producto",
+    "pk": 11,
+    "fields": {
+        "codigo": "C003",
+        "nombre": "Monitor Samsung 24 pulgadas",
+        "descripcion": "Monitor LED de 24 pulgadas para computador de escritorio.",
+        "categoria": 2,
+        "proveedor": 2,
+        "precio_compra": "420000.00",
+        "precio_venta": "550000.00",
+        "stock": 8,
+        "stock_minimo": 3,
+        "activo": true,
+        "fecha_creacion": "2026-05-17T03:05:25.270Z",
+        "fecha_actualizacion": "2026-05-17T03:05:25.270Z"
+    }
+},
+{
+    "model": "productos.producto",
+    "pk": 12,
+    "fields": {
+        "codigo": "C004",
+        "nombre": "Teclado Logitech USB",
+        "descripcion": "Teclado alámbrico para computador, conexión USB.",
+        "categoria": 2,
+        "proveedor": 1,
+        "precio_compra": "35000.00",
+        "precio_venta": "55000.00",
+        "stock": 15,
+        "stock_minimo": 5,
+        "activo": true,
+        "fecha_creacion": "2026-05-17T03:08:36.877Z",
+        "fecha_actualizacion": "2026-05-17T03:08:36.877Z"
+    }
+},
+{
+    "model": "productos.producto",
+    "pk": 13,
+    "fields": {
+        "codigo": "C005",
+        "nombre": "Mouse inalámbrico Genius",
+        "descripcion": "Mouse inalámbrico para computador portátil o de escritorio.",
+        "categoria": 2,
+        "proveedor": 2,
+        "precio_compra": "30000.00",
+        "precio_venta": "50000.00",
+        "stock": 20,
+        "stock_minimo": 6,
+        "activo": true,
+        "fecha_creacion": "2026-05-17T03:10:32.305Z",
+        "fecha_actualizacion": "2026-05-17T03:10:32.305Z"
+    }
+},
+{
+    "model": "productos.producto",
+    "pk": 14,
+    "fields": {
+        "codigo": "C006",
+        "nombre": "Base refrigerante para portátil",
+        "descripcion": "Base con ventiladores para mejorar la temperatura del portátil.",
+        "categoria": 2,
+        "proveedor": 2,
+        "precio_compra": "55000.00",
+        "precio_venta": "80000.00",
+        "stock": 15,
+        "stock_minimo": 3,
+        "activo": true,
+        "fecha_creacion": "2026-05-17T03:11:33.868Z",
+        "fecha_actualizacion": "2026-05-21T00:50:14.156Z"
+    }
+},
+{
+    "model": "productos.producto",
+    "pk": 15,
+    "fields": {
+        "codigo": "PD001",
+        "nombre": "Cuaderno Norma 100 hojas",
+        "descripcion": "Cuaderno cuadriculado de 100 hojas para estudio.",
+        "categoria": 3,
+        "proveedor": 3,
+        "precio_compra": "4500.00",
+        "precio_venta": "6500.00",
+        "stock": 34,
+        "stock_minimo": 9,
+        "activo": true,
+        "fecha_creacion": "2026-05-17T03:13:47.994Z",
+        "fecha_actualizacion": "2026-05-21T00:44:47.816Z"
+    }
+},
+{
+    "model": "productos.producto",
+    "pk": 16,
+    "fields": {
+        "codigo": "PD002",
+        "nombre": "Lapicero Kilométrico negro",
+        "descripcion": "Lapicero de tinta negra para oficina y estudio.",
+        "categoria": 3,
+        "proveedor": 1,
+        "precio_compra": "1200.00",
+        "precio_venta": "2000.00",
+        "stock": 50,
+        "stock_minimo": 15,
+        "activo": true,
+        "fecha_creacion": "2026-05-17T03:16:10.576Z",
+        "fecha_actualizacion": "2026-05-17T04:33:47.502Z"
+    }
+},
+{
+    "model": "productos.producto",
+    "pk": 17,
+    "fields": {
+        "codigo": "PD003",
+        "nombre": "Carpeta plástica tamaño carta",
+        "descripcion": "Carpeta plástica para guardar documentos tamaño carta.",
+        "categoria": 3,
+        "proveedor": 3,
+        "precio_compra": "1800.00",
+        "precio_venta": "3000.00",
+        "stock": 60,
+        "stock_minimo": 8,
+        "activo": true,
+        "fecha_creacion": "2026-05-17T04:31:40.427Z",
+        "fecha_actualizacion": "2026-05-21T01:10:55.349Z"
+    }
+},
+{
+    "model": "productos.producto",
+    "pk": 18,
+    "fields": {
+        "codigo": "PD004",
+        "nombre": "Resma de papel carta",
+        "descripcion": "Paquete de hojas blancas tamaño carta para impresión.",
+        "categoria": 3,
+        "proveedor": 3,
+        "precio_compra": "13500.00",
+        "precio_venta": "18000.00",
+        "stock": 12,
+        "stock_minimo": 4,
+        "activo": true,
+        "fecha_creacion": "2026-05-17T04:33:03.638Z",
+        "fecha_actualizacion": "2026-05-17T04:33:03.638Z"
+    }
+}
+]

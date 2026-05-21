@@ -1,0 +1,155 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div>
+        <p class="page-kicker">Panel principal</p>
+        <h1 class="page-title">Sistema de Gestion de Inventario</h1>
+        <p class="page-subtitle">Resumen inicial del inventario y accesos rapidos.</p>
+    </div>
+
+    <div class="surface-card">
+        <p class="mb-1">
+            <strong>Usuario:</strong> {{ request.user.username }}
+        </p>
+        <p class="mb-0">
+            <strong>Rol:</strong> {{ rol_usuario }}
+        </p>
+    </div>
+</div>
+
+<div class="row g-3">
+    {% for tarjeta in tarjetas %}
+        <div class="col-12 col-sm-6 col-xl-3">
+            <div class="metric-card metric-{{ tarjeta.color }}">
+                <div class="d-flex justify-content-between align-items-start gap-3">
+                    <div>
+                        <p class="metric-label mb-0">{{ tarjeta.titulo }}</p>
+                        <h2 class="metric-value">{{ tarjeta.valor }}</h2>
+                    </div>
+                    <span class="metric-pill">Inicial</span>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+</div>
+
+<section class="mt-4">
+
+                {% if es_administrador %}
+                    <div class="mb-3">
+                        <h2 class="h5 mb-1">Opciones administrativas</h2>
+                        <p class="text-muted mb-0">Gestiona catalogos, operaciones y reportes desde un solo lugar.</p>
+                    </div>
+
+                    <div class="row g-3">
+
+                        <div class="col-12 col-lg-4">
+                            <a class="option-card"
+                               href="{% url 'productos:producto_list' %}">
+                                <p class="option-title">Gestionar productos</p>
+                                <p class="option-text">Consulta existencias, precios y estados del catalogo.</p>
+                            </a>
+                        </div>
+
+                        <div class="col-12 col-lg-4">
+                            <div class="option-card">
+                                <p class="option-title">Catalogos base</p>
+                                <a class="d-block text-decoration-none"
+                                   href="{% url 'productos:categoria_list' %}">
+                                    Gestionar categorias
+                                </a>
+
+                                <a class="d-block text-decoration-none mt-2"
+                                   href="{% url 'productos:proveedor_list' %}">
+                                    Gestionar proveedores
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="col-12 col-lg-4">
+                            <div class="option-card">
+                                <p class="option-title">Operacion</p>
+                                <a class="d-block text-decoration-none"
+                                   href="{% url 'compras:crear_compra' %}">
+                                    Registrar compra
+                                </a>
+
+                                <a class="d-block text-decoration-none mt-2"
+                                   href="{% url 'ventas:crear_venta' %}">
+                                    Registrar venta
+                                </a>
+
+                                <a class="d-block text-decoration-none mt-2"
+                                   href="{% url 'compras:lista_movimientos' %}">
+                                    Ver movimientos de inventario
+                                </a>
+
+                                <a class="d-block text-decoration-none mt-2"
+                                   href="{% url 'reportes:dashboard_reportes' %}">
+                                    Ver reportes
+                                </a>
+                            </div>
+                        </div>
+
+                    </div>
+
+                {% elif es_operador %}
+                    <div class="mb-3">
+                        <h2 class="h5 mb-1">Opciones operativas</h2>
+                        <p class="text-muted mb-0">Accesos rapidos para registrar entradas, salidas y revisar stock.</p>
+                    </div>
+
+                    <div class="row g-3">
+
+                        <div class="col-12 col-lg-4">
+                            <a class="option-card"
+                               href="{% url 'productos:producto_list' %}">
+                                <p class="option-title">Ver productos</p>
+                                <p class="option-text">Consulta el inventario disponible y productos con stock bajo.</p>
+                            </a>
+                        </div>
+
+                        <div class="col-12 col-lg-4">
+                            <div class="option-card">
+                                <p class="option-title">Registrar operaciones</p>
+                                <a class="d-block text-decoration-none"
+                                   href="{% url 'compras:crear_compra' %}">
+                                    Registrar compra
+                                </a>
+
+                                <a class="d-block text-decoration-none mt-2"
+                                   href="{% url 'ventas:crear_venta' %}">
+                                    Registrar venta
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="col-12 col-lg-4">
+                            <div class="option-card">
+                                <p class="option-title">Seguimiento</p>
+                                <a class="d-block text-decoration-none"
+                                   href="{% url 'compras:lista_movimientos' %}">
+                                    Ver movimientos de inventario
+                                </a>
+
+                                <a class="d-block text-decoration-none mt-2"
+                                   href="{% url 'productos:producto_list' %}">
+                                    Consultar stock
+                                </a>
+                            </div>
+                        </div>
+
+                    </div>
+
+                {% else %}
+                    <h2 class="h5 mb-3">Rol pendiente</h2>
+                    <p class="text-muted mb-0">
+                        Tu usuario aun no tiene un rol asignado.
+                    </p>
+                {% endif %}
+
+</section>
+{% endblock %}

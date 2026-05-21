@@ -1,0 +1,256 @@
+{% extends 'base.html' %}
+
+{% block title %}Reportes{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div>
+        <p class="page-kicker">Analitica</p>
+        <h1 class="page-title">Reportes del sistema</h1>
+        <p class="page-subtitle">Resumen general del inventario, compras, ventas y movimientos.</p>
+    </div>
+
+    <div class="d-flex flex-wrap gap-2">
+        <a href="{% url 'dashboard' %}" class="btn btn-outline-secondary">
+            Volver al dashboard
+        </a>
+        <a href="{% url 'reportes:exportar_reporte_excel' %}" class="btn btn-success">
+            Exportar Excel
+        </a>
+    </div>
+</div>
+
+<div class="row g-3 mb-4">
+    <div class="col-12 col-md-6 col-xl-3">
+        <div class="metric-card">
+            <div class="d-flex justify-content-between align-items-start gap-3">
+                <div>
+                    <p class="metric-label mb-0">Productos</p>
+                    <h2 class="metric-value">{{ total_productos }}</h2>
+                </div>
+                <span class="metric-pill">Catalogo</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-12 col-md-6 col-xl-3">
+        <div class="metric-card metric-success">
+            <div class="d-flex justify-content-between align-items-start gap-3">
+                <div>
+                    <p class="metric-label mb-0">Compras</p>
+                    <h2 class="metric-value">{{ total_compras_registradas }}</h2>
+                    <p class="text-muted mb-0 mt-2">{{ total_compras_dinero_formateado }}</p>
+                </div>
+                <span class="metric-pill">Entradas</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-12 col-md-6 col-xl-3">
+        <div class="metric-card metric-info">
+            <div class="d-flex justify-content-between align-items-start gap-3">
+                <div>
+                    <p class="metric-label mb-0">Ventas</p>
+                    <h2 class="metric-value">{{ total_ventas_registradas }}</h2>
+                    <p class="text-muted mb-0 mt-2">{{ total_ventas_dinero_formateado }}</p>
+                </div>
+                <span class="metric-pill">Salidas</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-12 col-md-6 col-xl-3">
+        <div class="metric-card metric-warning">
+            <div class="d-flex justify-content-between align-items-start gap-3">
+                <div>
+                    <p class="metric-label mb-0">Bajo inventario</p>
+                    <h2 class="metric-value">{{ total_bajo_stock }}</h2>
+                </div>
+                <span class="metric-pill">Alerta</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4">
+    <div class="col-12 col-xl-6">
+        <section class="surface-card p-0 overflow-hidden h-100">
+            <div class="p-3 border-bottom">
+                <h2 class="h5 mb-1">Productos mas vendidos</h2>
+                <p class="text-muted mb-0">Ranking por cantidad vendida.</p>
+            </div>
+
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Producto</th>
+                            <th class="text-end">Cantidad vendida</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for producto in productos_mas_vendidos %}
+                            <tr>
+                                <td class="fw-semibold">{{ producto.producto__nombre }}</td>
+                                <td class="text-end">{{ producto.cantidad_vendida }}</td>
+                            </tr>
+                        {% empty %}
+                            <tr>
+                                <td colspan="2" class="text-center text-muted py-4">No hay ventas registradas.</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </div>
+
+    <div class="col-12 col-xl-6">
+        <section class="surface-card p-0 overflow-hidden h-100">
+            <div class="p-3 border-bottom">
+                <h2 class="h5 mb-1">Productos con bajo inventario</h2>
+                <p class="text-muted mb-0">Productos que requieren revision de stock.</p>
+            </div>
+
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Producto</th>
+                            <th class="text-end">Stock</th>
+                            <th class="text-end">Stock minimo</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for producto in productos_bajo_stock %}
+                            <tr>
+                                <td class="fw-semibold">{{ producto.nombre }}</td>
+                                <td class="text-end">{{ producto.stock }}</td>
+                                <td class="text-end">{{ producto.stock_minimo }}</td>
+                            </tr>
+                        {% empty %}
+                            <tr>
+                                <td colspan="3" class="text-center text-muted py-4">No hay productos con bajo inventario.</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </div>
+</div>
+
+<div class="row g-4 mt-1">
+    <div class="col-12 col-xl-6">
+        <section class="surface-card p-0 overflow-hidden h-100">
+            <div class="p-3 border-bottom">
+                <h2 class="h5 mb-1">Ultimas compras</h2>
+                <p class="text-muted mb-0">Entradas recientes de inventario.</p>
+            </div>
+
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th>ID</th>
+                            <th>Proveedor</th>
+                            <th>Fecha</th>
+                            <th class="text-end">Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for compra in ultimas_compras %}
+                            <tr>
+                                <td class="fw-semibold">#{{ compra.id }}</td>
+                                <td>{{ compra.proveedor.nombre }}</td>
+                                <td>{{ compra.fecha|date:"d/m/Y H:i" }}</td>
+                                <td class="text-end fw-semibold">${{ compra.total }}</td>
+                            </tr>
+                        {% empty %}
+                            <tr>
+                                <td colspan="4" class="text-center text-muted py-4">No hay compras registradas.</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </div>
+
+    <div class="col-12 col-xl-6">
+        <section class="surface-card p-0 overflow-hidden h-100">
+            <div class="p-3 border-bottom">
+                <h2 class="h5 mb-1">Ultimas ventas</h2>
+                <p class="text-muted mb-0">Salidas recientes de inventario.</p>
+            </div>
+
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th>ID</th>
+                            <th>Cliente</th>
+                            <th>Fecha</th>
+                            <th class="text-end">Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for venta in ultimas_ventas %}
+                            <tr>
+                                <td class="fw-semibold">#{{ venta.id }}</td>
+                                <td>{{ venta.cliente|default:"Cliente general" }}</td>
+                                <td>{{ venta.fecha|date:"d/m/Y H:i" }}</td>
+                                <td class="text-end fw-semibold">${{ venta.total }}</td>
+                            </tr>
+                        {% empty %}
+                            <tr>
+                                <td colspan="4" class="text-center text-muted py-4">No hay ventas registradas.</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </div>
+</div>
+
+<section class="surface-card p-0 overflow-hidden mt-4">
+    <div class="p-3 border-bottom">
+        <h2 class="h5 mb-1">Ultimos movimientos de inventario</h2>
+        <p class="text-muted mb-0">Registro reciente de entradas y salidas.</p>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+            <thead class="table-light">
+                <tr>
+                    <th>Producto</th>
+                    <th>Tipo</th>
+                    <th class="text-end">Cantidad</th>
+                    <th>Fecha</th>
+                    <th>Descripcion</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for movimiento in ultimos_movimientos %}
+                    <tr>
+                        <td class="fw-semibold">{{ movimiento.producto.nombre }}</td>
+                        <td>
+                            <span class="badge {% if movimiento.tipo == 'ENTRADA' %}text-bg-success{% else %}text-bg-warning{% endif %}">
+                                {{ movimiento.tipo }}
+                            </span>
+                        </td>
+                        <td class="text-end">{{ movimiento.cantidad }}</td>
+                        <td>{{ movimiento.fecha|date:"d/m/Y H:i" }}</td>
+                        <td>{{ movimiento.descripcion }}</td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="5" class="text-center text-muted py-4">No hay movimientos registrados.</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>
+{% endblock %}
